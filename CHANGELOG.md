@@ -1,5 +1,7 @@
 # 2025-06-27
 ## 0.1.2
+- Added 'flixel-addons' library
+- Added "MouseBlock"
 - Fixed World width
 - Added more debug tools that allow modification of the world size (Z,X)
 - World size variables are public static now

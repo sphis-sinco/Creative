@@ -95,10 +95,16 @@ class PlayState extends FlxState
 		add(WorldHeightText);
 
 		FlxG.camera.zoom = zoom;
+		MouseBlock = new FlxSprite(0, 0).loadGraphic(FileManager.getImageFile('outline'));
+		MouseBlock.scale.set(blockScale, blockScale);
+
+		add(MouseBlock);
 	}
 
 	var WorldWidthText:FlxText;
 	var WorldHeightText:FlxText;
+
+	var MouseBlock:FlxSprite;
 
 	override public function update(elapsed:Float):Void
 	{
@@ -115,5 +121,8 @@ class PlayState extends FlxState
 
 		if (FlxG.keys.anyJustReleased([Q, E, Z, X]))
 			FlxG.resetState();
+		MouseBlock.x = (Math.floor(FlxG.mouse.x / (16 * blockScale)) * (16 * blockScale) + (16 * 1.5));
+		MouseBlock.y = (Math.floor(FlxG.mouse.y / (16 * blockScale)) * (16 * blockScale) + 16);
 	}
+
 }
