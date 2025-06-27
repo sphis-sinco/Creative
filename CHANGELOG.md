@@ -1,5 +1,7 @@
 # 2025-06-27
 ## 0.3.0
+- Added a blank world type playable through the main menu
+- When loading a world you can now add an optional argument to load a specific file
 - Removed FlxButtonPlus from PlayState
 - Added 'flixel-ui' library
 - Added main menu with a logo

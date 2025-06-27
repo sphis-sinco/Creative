@@ -26,7 +26,7 @@ class PlayState extends FlxState
 		'red', 'orange', 'yellow', 'green', 'lime', 'cyan', 'blue', 'purple', 'pink', 'brown', 'gray', 'white', 'black'
 	];
 
-	public var worldBlocks:FlxTypedGroup<Block> = new FlxTypedGroup<Block>();
+	public static var worldBlocks:FlxTypedGroup<Block> = new FlxTypedGroup<Block>();
 
 	public function worldRender()
 	{
@@ -141,8 +141,8 @@ class PlayState extends FlxState
 		MouseBlock = new MouseBlock(0, 0);
 		MouseBlock.scale.set(blockScale, blockScale);
 
-		worldInit();
-		add(worldBlocks);
+		if (randomWorld)
+			add(worldBlocks);
 		CurrentBlock = new Block('stone', VersionText.x + VersionText.width + 10, 10);
 		CurrentBlock.scale.set(blockScale, blockScale);
 		add(CurrentBlock);
@@ -180,9 +180,9 @@ class PlayState extends FlxState
 		#end
 	}
 
-	function loadWorld()
+	public static function loadWorld(file:String = 'save')
 	{
-		var data:WorldSave = #if desktop FileManager.getJSON('save.json'); #end
+		var data:WorldSave = #if desktop FileManager.getJSON('$file.json'); #end
 
 		if (Json.stringify(data) == '' || data.world == null)
 			return;
@@ -198,13 +198,31 @@ class PlayState extends FlxState
 
 		for (blockData in data.world)
 		{
-			var block:Block = new Block(blockData.tag, blockData.x, blockData.y);
-			block.scale.set(blockScale, blockScale);
+			var block:Block;
 
+			// if (data.version == '0.3.0')
+			block = new Block(blockData.tag, blockData.x, blockData.y);
+
+			block.scale.set(blockScale, blockScale);
 			worldBlocks.add(block);
 		}
 	}
 	#end
+
+	var randomWorld:Bool = true;
+
+	override public function new(?file:String = null)
+	{
+		super();
+
+		#if sys
+		if (file != null)
+		{
+			randomWorld = false;
+			loadWorld(file);
+		}
+		#end
+	}
 
 	var WorldWidthText:FlxText;
 	var WorldHeightText:FlxText;
