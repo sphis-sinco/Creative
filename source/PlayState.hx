@@ -22,6 +22,8 @@ class PlayState extends FlxState
 		'stone': 8,
 	};
 
+	public var blocks:Array<String> = ['stone', 'grass', 'dirt'];
+
 	public var worldBlocks:FlxTypedGroup<Block> = new FlxTypedGroup<Block>();
 
 	public function worldRender()
@@ -76,12 +78,12 @@ class PlayState extends FlxState
 		var block_tag:String = 'air';
 
 		if (y > worldHeight - worldLayers.grass)
-			block_tag = 'grass';
+			block_tag = blocks[1];
 		final dirtRandom:Int = new FlxRandom().int(worldLayers.dirt_offset_min, worldLayers.dirt_offset_max);
 		if (y > worldHeight - (worldLayers.dirt))
-			block_tag = 'dirt';
+			block_tag = blocks[2];
 		if (y > worldHeight - (worldLayers.stone - dirtRandom))
-			block_tag = 'stone';
+			block_tag = blocks[0];
 
 		var block:Block = new Block(block_tag, 0, 0);
 		block.scale.set(blockScale, blockScale);
@@ -130,9 +132,15 @@ class PlayState extends FlxState
 
 	var CurrentBlock:Block;
 
+	var new_tag:String;
+	var new_tag_id:Int = 0;
+
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
+		if (new_tag != CurrentBlock.block_tag)
+			new_tag = CurrentBlock.block_tag;
+
 		#if debug
 		if (FlxG.keys.justReleased.Q && zoom > 0.5)
 			zoom -= 0.5;
@@ -163,6 +171,36 @@ class PlayState extends FlxState
 		else if (FlxG.mouse.justReleased)
 		{
 			placeBlock();
+		}
+		if (FlxG.keys.anyJustReleased([LEFT, RIGHT]))
+		{
+			var i:Int = 0;
+			for (block in blocks)
+			{
+				if (block == new_tag)
+				{
+					new_tag_id = i;
+				}
+				i++;
+			}
+
+			if (FlxG.keys.justReleased.LEFT)
+			{
+				new_tag_id--;
+			}
+			else if (FlxG.keys.justReleased.RIGHT)
+			{
+				new_tag_id++;
+			}
+
+			if (new_tag_id < 0)
+				new_tag_id = blocks.length - 1;
+			else if (new_tag_id > blocks.length - 1)
+				new_tag_id = 0;
+			trace(new_tag_id);
+
+			new_tag = blocks[new_tag_id];
+			CurrentBlock.changeBlock(new_tag);
 		}
 	}
 

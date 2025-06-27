@@ -1,5 +1,6 @@
 # 2025-06-27
 ## 0.2.1
+- Added block selecting
 - Added function to change a block texture to the block class
 - Block traces related to a block being in the way of placing a block now requires the BLOCK_TRACES conditional
 - Block traces related to a block being in the way of placing a block now include the block_tag
