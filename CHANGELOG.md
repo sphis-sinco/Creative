@@ -1,5 +1,8 @@
 # 2025-06-27
 ## 0.1.2
+- Fixed World width
+- Added more debug tools that allow modification of the world size (Z,X)
+- World size variables are public static now
 - PlayState version text has 'Creative' infront of it
 - More World Generation modifications
 - All textures were modified
