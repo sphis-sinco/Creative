@@ -1,5 +1,6 @@
 package;
 
+import flixel.addons.ui.FlxButtonPlus;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxRandom;
 import flixel.text.FlxText;
@@ -131,6 +132,11 @@ class PlayState extends FlxState
 		add(CurrentBlock);
 
 		add(MouseBlock);
+		saveWorldButton = new FlxButtonPlus(10, 10 + VersionText.y + VersionText.height, null, 'Save', 256, 32);
+		#if debug
+		saveWorldButton.y = 10 + WorldHeightText.y + WorldHeightText.height;
+		#end
+		add(saveWorldButton);
 	}
 
 	var WorldWidthText:FlxText;
@@ -142,6 +148,8 @@ class PlayState extends FlxState
 
 	var new_tag:String;
 	var new_tag_id:Int = 0;
+
+	var saveWorldButton:FlxButtonPlus;
 
 	override public function update(elapsed:Float):Void
 	{
