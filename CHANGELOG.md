@@ -1,5 +1,6 @@
 # 2025-06-27
 ## 0.2.2
+- Added world loading
 - Added world saving
 - Added wool blocks
         - 13 wool blocks

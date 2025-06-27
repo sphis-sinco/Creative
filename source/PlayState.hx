@@ -140,17 +140,45 @@ class PlayState extends FlxState
 
 		for (block in worldBlocks.members)
 		{
-			worldData.push(block);
+			var data = {
+				x: block.x,
+				y: block.y,
+				tag: block.block_tag
+			}
+
+			worldData.push(data);
 		}
 
-		var data = {
+		var data:WorldSave = {
+			block_data_version: 3,
 			version: Version.generateVersionString(true, true, true),
 			world: worldData
 		};
 
 		#if desktop
-		FileManager.writeToPath('save.json', '$data');
+		FileManager.writeToPath('save.json', Json.stringify(data));
 		#end
+	}
+	function loadWorld()
+	{
+		var data:WorldSave = #if desktop FileManager.getJSON('save.json'); #end
+
+		if (worldBlocks.length > 0)
+		{
+			for (block in worldBlocks)
+			{
+				block.destroy();
+				worldBlocks.remove(block);
+			}
+		}
+
+		for (blockData in data.world)
+		{
+			var block:Block = new Block(blockData.tag, blockData.x, blockData.y);
+			block.scale.set(blockScale, blockScale);
+
+			worldBlocks.add(block);
+		}
 	}
 	#end
 
@@ -237,6 +265,8 @@ class PlayState extends FlxState
 		#if sys
 		if (FlxG.keys.justReleased.ESCAPE)
 			saveWorld();
+		if (FlxG.keys.justReleased.ENTER)
+			loadWorld();
 		#end
 	}
 
