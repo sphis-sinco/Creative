@@ -17,15 +17,19 @@ class PlayState extends FlxState
 
 	public function worldRender()
 	{
+		trace('worldRender');
 		for (block in worldBlocks)
 		{
-			trace(block);
 			add(block);
 		}
 	}
 
 	public function worldInit()
 	{
+		trace('worldInit');
+
+		worldBlocks = [];
+
 		var x:Int = 0;
 		var y:Int = 0;
 
@@ -34,7 +38,8 @@ class PlayState extends FlxState
 			while (x < worldWidth)
 			{
 				x++;
-				if (y == worldHeight - worldLayers.stone)
+				trace('$x|$y');
+				if (y < worldHeight - worldLayers.stone)
 				{
 					var block:Block = new Block('stone', x * blockScale, y * blockScale);
 					block.scale.set(blockScale, blockScale);
