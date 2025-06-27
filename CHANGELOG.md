@@ -1,7 +1,9 @@
 # 2025-06-27
 ## 0.2.2
+- Added world saving
 - Added wool blocks
         - 13 wool blocks
+
 ## 0.2.1
 - Added block selecting
 - Added function to change a block texture to the block class

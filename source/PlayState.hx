@@ -5,6 +5,9 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxRandom;
 import flixel.text.FlxText;
 import flixel.util.FlxSort;
+import openfl.events.Event;
+import openfl.events.IOErrorEvent;
+import openfl.net.FileReference;
 
 class PlayState extends FlxState
 {
@@ -134,8 +137,56 @@ class PlayState extends FlxState
 		add(MouseBlock);
 	}
 
+	var _file:FileReference;
+	
 	function saveWorld() {
+		var json = {
+			"version": Version.generateVersionString(true, true, true),
+			"worldBlocks": worldBlocks
+		}
 
+		var data:String = haxe.Json.stringify(json, "\t");
+
+		if ((data != null) && (data.length > 0))
+		{
+			_file = new FileReference();
+			_file.addEventListener(#if desktop Event.SELECT #else Event.COMPLETE #end, onSaveComplete);
+			_file.addEventListener(Event.CANCEL, onSaveCancel);
+			_file.addEventListener(IOErrorEvent.IO_ERROR, onSaveError);
+			_file.save(data.trim(), "creative.json");
+		}
+	}
+
+	function onSaveComplete(_):Void
+	{
+		_file.removeEventListener(Event.COMPLETE, onSaveComplete);
+		_file.removeEventListener(Event.CANCEL, onSaveCancel);
+		_file.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);
+		_file = null;
+		FlxG.log.notice("Successfully saved LEVEL DATA.");
+	}
+
+	/**
+	 * Called when the save file dialog is cancelled.
+	 */
+	function onSaveCancel(_):Void
+	{
+		_file.removeEventListener(Event.COMPLETE, onSaveComplete);
+		_file.removeEventListener(Event.CANCEL, onSaveCancel);
+		_file.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);
+		_file = null;
+	}
+
+	/**
+	 * Called if there is an error while saving the gameplay recording.
+	 */
+	function onSaveError(_):Void
+	{
+		_file.removeEventListener(Event.COMPLETE, onSaveComplete);
+		_file.removeEventListener(Event.CANCEL, onSaveCancel);
+		_file.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);
+		_file = null;
+		FlxG.log.error("Problem saving Level data");
 	}
 
 	var WorldWidthText:FlxText;
@@ -187,6 +238,7 @@ class PlayState extends FlxState
 		{
 			placeBlock();
 		}
+
 		if (FlxG.keys.anyJustReleased([LEFT, RIGHT]))
 		{
 			var i:Int = 0;
@@ -217,6 +269,10 @@ class PlayState extends FlxState
 			new_tag = blocks[new_tag_id];
 			CurrentBlock.changeBlock(new_tag);
 		}
+		#if sys
+		if (FlxG.keys.justReleased.ESCAPE)
+			saveWorld();
+		#end
 	}
 
 	public function placeBlock()
