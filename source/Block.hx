@@ -14,4 +14,9 @@ class Block extends FlxSprite
 		trace('New $Block block: $Block at x: $X, y: $Y');
 		#end
 	}
+	public function changeBlock(new_block_tag:String)
+	{
+		block_tag = new_block_tag;
+		loadGraphic(FileManager.getImageFile('blocks/blocks-${new_block_tag.toLowerCase()}'));
+	}
 }
