@@ -132,11 +132,10 @@ class PlayState extends FlxState
 		add(CurrentBlock);
 
 		add(MouseBlock);
-		saveWorldButton = new FlxButtonPlus(10, 10 + VersionText.y + VersionText.height, null, 'Save', 256, 32);
-		#if debug
-		saveWorldButton.y = 10 + WorldHeightText.y + WorldHeightText.height;
-		#end
-		add(saveWorldButton);
+	}
+
+	function saveWorld() {
+
 	}
 
 	var WorldWidthText:FlxText;
