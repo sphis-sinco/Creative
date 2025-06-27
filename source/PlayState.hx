@@ -4,10 +4,6 @@ import flixel.addons.ui.FlxButtonPlus;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxRandom;
 import flixel.text.FlxText;
-import flixel.util.FlxSort;
-import openfl.events.Event;
-import openfl.events.IOErrorEvent;
-import openfl.net.FileReference;
 
 class PlayState extends FlxState
 {
@@ -137,55 +133,17 @@ class PlayState extends FlxState
 		add(MouseBlock);
 	}
 
-	var _file:FileReference;
-
-	function saveWorld() {
-		var data:String = haxe.Json.stringify({
-			"version": Version.generateVersionString(true, true, true),
-			"worldBlocks": worldBlocks
-		}, "\t");
-
-		if ((data != null) && (data.length > 0))
-		{
-			_file = new FileReference();
-			_file.addEventListener(#if desktop Event.SELECT #else Event.COMPLETE #end, onSaveComplete);
-			_file.addEventListener(Event.CANCEL, onSaveCancel);
-			_file.addEventListener(IOErrorEvent.IO_ERROR, onSaveError);
-			_file.save(data.trim(), "creative.json");
-		}
-	}
-
-	function onSaveComplete(_):Void
+	#if sys
+	function saveWorld()
 	{
-		_file.removeEventListener(Event.COMPLETE, onSaveComplete);
-		_file.removeEventListener(Event.CANCEL, onSaveCancel);
-		_file.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);
-		_file = null;
-		FlxG.log.notice("Successfully saved LEVEL DATA.");
-	}
+		var data = {
+			version: Version.generateVersionString(true, true, true),
+			world: worldBlocks
+		};
 
-	/**
-	 * Called when the save file dialog is cancelled.
-	 */
-	function onSaveCancel(_):Void
-	{
-		_file.removeEventListener(Event.COMPLETE, onSaveComplete);
-		_file.removeEventListener(Event.CANCEL, onSaveCancel);
-		_file.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);
-		_file = null;
+		#if desktop File.saveContent('save.json', Json.stringify(data)); #end
 	}
-
-	/**
-	 * Called if there is an error while saving the gameplay recording.
-	 */
-	function onSaveError(_):Void
-	{
-		_file.removeEventListener(Event.COMPLETE, onSaveComplete);
-		_file.removeEventListener(Event.CANCEL, onSaveCancel);
-		_file.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);
-		_file = null;
-		FlxG.log.error("Problem saving Level data");
-	}
+	#end
 
 	var WorldWidthText:FlxText;
 	var WorldHeightText:FlxText;
