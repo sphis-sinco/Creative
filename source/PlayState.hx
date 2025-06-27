@@ -136,12 +136,21 @@ class PlayState extends FlxState
 	#if sys
 	function saveWorld()
 	{
+		var worldData = [];
+
+		for (block in worldBlocks.members)
+		{
+			worldData.push(block);
+		}
+
 		var data = {
 			version: Version.generateVersionString(true, true, true),
-			world: worldBlocks
+			world: worldData
 		};
 
-		#if desktop File.saveContent('save.json', Json.stringify(data)); #end
+		#if desktop
+		FileManager.writeToPath('save.json', '$data');
+		#end
 	}
 	#end
 
