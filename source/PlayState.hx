@@ -81,12 +81,12 @@ class PlayState extends FlxState
 		var block_tag:String = 'air';
 
 		if (y > worldHeight - worldLayers.grass)
-			block_tag = blocks[1];
+			block_tag = 'grass';
 		final dirtRandom:Int = new FlxRandom().int(worldLayers.dirt_offset_min, worldLayers.dirt_offset_max);
 		if (y > worldHeight - (worldLayers.dirt))
-			block_tag = blocks[2];
+			block_tag = 'dirt';
 		if (y > worldHeight - (worldLayers.stone - dirtRandom))
-			block_tag = blocks[0];
+			block_tag = 'stone';
 
 		var block:Block = new Block(block_tag, 0, 0);
 		block.scale.set(blockScale, blockScale);
@@ -104,6 +104,24 @@ class PlayState extends FlxState
 		{
 			blocks.push('${wool}_wool');
 		}
+
+		#if sys
+		var blocksArr:Array<String> = FileManager.readDirectory('assets/images/blocks');
+
+		if (blocksArr.length > 0)
+		{
+			blocks = [];
+			for (block in blocksArr)
+			{
+				blocks.push(block.replace('blocks-', '').replace('.png', ''));
+			}
+
+			blocks.remove('air');
+			blocks.remove('blocks.aseprite');
+
+			trace(blocks);
+		}
+		#end
 
 		var VersionText:FlxText = new FlxText(10, 10, 0, 'Creative ' + Version.generateVersionString(true, true, true), 16);
 		add(VersionText);
@@ -159,6 +177,7 @@ class PlayState extends FlxState
 		FileManager.writeToPath('save.json', Json.stringify(data));
 		#end
 	}
+
 	function loadWorld()
 	{
 		var data:WorldSave = #if desktop FileManager.getJSON('save.json'); #end
