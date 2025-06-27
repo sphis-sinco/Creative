@@ -6,6 +6,6 @@ class Block extends FlxSprite
 	{
 		super(X, Y);
 
-		loadGraphic(FileManager.getImageFile('blocks/$Block'));
+		loadGraphic(FileManager.getImageFile('blocks/blocks-$Block'));
 	}
 }
