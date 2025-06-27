@@ -148,6 +148,9 @@ class PlayState extends FlxState
 		CurrentBlock.scale.set(blockScale, blockScale);
 		add(CurrentBlock);
 
+		CurrentBlockText = new FlxText(CurrentBlock.x + CurrentBlock.width + 10, CurrentBlock.y, 0, 'stone', 16);
+		add(CurrentBlockText);
+
 		add(MouseBlock);
 	}
 
@@ -156,7 +159,7 @@ class PlayState extends FlxState
 	{
 		var worldData = [];
 
-		for (block in worldBlocks.members)
+		for (block in worldBlocks)
 		{
 			var data = {
 				x: block.x,
@@ -181,6 +184,9 @@ class PlayState extends FlxState
 	function loadWorld()
 	{
 		var data:WorldSave = #if desktop FileManager.getJSON('save.json'); #end
+
+		if (Json.stringify(data) == '' || data.world == null)
+			return;
 
 		if (worldBlocks.length > 0)
 		{
@@ -207,6 +213,7 @@ class PlayState extends FlxState
 	var MouseBlock:FlxSprite;
 
 	var CurrentBlock:Block;
+	var CurrentBlockText:FlxText;
 
 	var new_tag:String;
 	var new_tag_id:Int = 0;
@@ -216,6 +223,8 @@ class PlayState extends FlxState
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
+		CurrentBlockText.text = CurrentBlock.block_tag;
+
 		if (new_tag != CurrentBlock.block_tag)
 			new_tag = CurrentBlock.block_tag;
 

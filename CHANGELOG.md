@@ -1,4 +1,8 @@
 # 2025-06-27
+## 0.2.3
+- There are now checks for null saved world data
+- The current block selection now has text under it that says the block
+
 ## 0.2.2
 - On systems that support sys, blocks are loaded automatically alphabetically
 - Added world loading
