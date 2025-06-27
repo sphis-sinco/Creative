@@ -116,6 +116,10 @@ class PlayState extends FlxState
 
 		worldInit();
 		add(worldBlocks);
+		CurrentBlock = new Block('stone', VersionText.x + VersionText.width + 10, 10);
+		CurrentBlock.scale.set(blockScale, blockScale);
+		add(CurrentBlock);
+
 		add(MouseBlock);
 	}
 
@@ -123,6 +127,8 @@ class PlayState extends FlxState
 	var WorldHeightText:FlxText;
 
 	var MouseBlock:FlxSprite;
+
+	var CurrentBlock:Block;
 
 	override public function update(elapsed:Float):Void
 	{
@@ -202,9 +208,7 @@ class PlayState extends FlxState
 
 		if (!blocked && placed)
 		{
-			var block_tag:String = 'stone';
-
-			var block:Block = new Block(block_tag, 0, 0);
+			var block:Block = new Block(CurrentBlock.block_tag, 0, 0);
 			block.scale.set(blockScale, blockScale);
 			block.setPosition(MouseBlock.x, MouseBlock.y);
 			worldBlocks.add(block);
