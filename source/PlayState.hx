@@ -7,7 +7,7 @@ import flixel.util.FlxSort;
 
 class PlayState extends FlxState
 {
-	public var blockScale:Int = 2;
+	public static var blockScale:Int = 2;
 
 	public static var worldWidth:Int = 39;
 	public static var worldHeight:Int = 22;
@@ -56,25 +56,7 @@ class PlayState extends FlxState
 		{
 			while (x < worldWidth)
 			{
-				#if WORLD_RENDERING_TRACES
-				trace('$x|$y');
-				#end
-				var block_tag:String = 'air';
-
-				if (y > worldHeight - worldLayers.grass)
-					block_tag = 'grass';
-				final dirtRandom:Int = new FlxRandom().int(0, 3);
-				if (y > worldHeight - (worldLayers.dirt))
-					block_tag = 'dirt';
-				if (y > worldHeight - (worldLayers.stone - dirtRandom))
-					block_tag = 'stone';
-
-				var block:Block = new Block(block_tag, 0, 0);
-				block.scale.set(blockScale, blockScale);
-				block.setPosition(x * (x > 0 ? (blockScale * block.width) : 1), y * (y > 0 ? (blockScale * block.height) : 1));
-
-				if (block_tag != 'air')
-					worldBlocks.add(block);
+				blockSpawn(x, y);
 				x++;
 			}
 			y++;
@@ -84,6 +66,29 @@ class PlayState extends FlxState
 		worldRender();
 	}
 
+	public function blockSpawn(x:Float, y:Float)
+	{
+		#if WORLD_RENDERING_TRACES
+		trace('$x|$y');
+		#end
+		var block_tag:String = 'air';
+
+		if (y > worldHeight - worldLayers.grass)
+			block_tag = 'grass';
+		final dirtRandom:Int = new FlxRandom().int(0, 3);
+		if (y > worldHeight - (worldLayers.dirt))
+			block_tag = 'dirt';
+		if (y > worldHeight - (worldLayers.stone - dirtRandom))
+			block_tag = 'stone';
+
+		var block:Block = new Block(block_tag, 0, 0);
+		block.scale.set(blockScale, blockScale);
+		block.setPosition(x * (x > 0 ? (blockScale * block.width) : 1), y * (y > 0 ? (blockScale * block.height) : 1));
+
+		if (block_tag != 'air')
+			worldBlocks.add(block);
+	}
+
 	override public function create():Void
 	{
 		super.create();
@@ -91,6 +96,7 @@ class PlayState extends FlxState
 		var VersionText:FlxText = new FlxText(10, 10, 0, 'Creative ' + Version.generateVersionString(true, true, true), 16);
 		add(VersionText);
 		VersionText.scrollFactor.set(0, 0);
+		#if debug
 		WorldWidthText = new FlxText(10, 10 + VersionText.y + VersionText.height, 0, 'World width: ' + Std.string(worldWidth), 16);
 		WorldHeightText = new FlxText(10, 10 + WorldWidthText.y + WorldWidthText.height, 0, 'World height: ' + Std.string(worldHeight), 16);
 
@@ -99,10 +105,11 @@ class PlayState extends FlxState
 
 		add(WorldWidthText);
 		add(WorldHeightText);
+		#end
 
 		FlxG.camera.zoom = zoom;
 
-		MouseBlock = new FlxSprite(0, 0).loadGraphic(FileManager.getImageFile('outline'));
+		MouseBlock = new MouseBlock(0, 0);
 		MouseBlock.scale.set(blockScale, blockScale);
 
 		worldInit();
@@ -133,8 +140,6 @@ class PlayState extends FlxState
 			FlxG.resetState();
 		#end
 
-		MouseBlock.x = (Math.floor(FlxG.mouse.x / (16 * blockScale)) * (16 * blockScale) + (16 * 1.5));
-		MouseBlock.y = (Math.floor(FlxG.mouse.y / (16 * blockScale)) * (16 * blockScale) + 16);
 		if (FlxG.mouse.justReleasedRight)
 		{
 			for (block in worldBlocks)
@@ -149,50 +154,56 @@ class PlayState extends FlxState
 		}
 		else if (FlxG.mouse.justReleased)
 		{
-			var x:Int = 0;
-			var y:Int = 0;
-			var blocked:Bool = false;
-			var placed:Bool = false;
+			placeBlock();
+		}
+	}
 
-			while (y < worldHeight)
+	public function placeBlock()
+	{
+		var blocked:Bool = false;
+		var placed:Bool = false;
+		var x:Int = 0;
+
+		var y:Int = 0;
+
+		while (y < worldHeight)
+		{
+			while (x < worldWidth)
 			{
-				while (x < worldWidth)
+				for (block in worldBlocks)
 				{
-					for (block in worldBlocks)
+					if (MouseBlock.overlaps(block))
 					{
-						if (MouseBlock.overlaps(block))
-						{
-							trace('block in the way');
-							blocked = true;
-							placed = false;
-							break;
-						}
-						else
-						{
-							placed = true;
-						}
-					}
-
-					x++;
-
-					if (blocked || placed)
+						trace('block in the way');
+						blocked = true;
+						placed = false;
 						break;
+					}
+					else
+					{
+						placed = true;
+					}
 				}
-				y++;
-				x = 0;
+
+				x++;
+
 				if (blocked || placed)
 					break;
 			}
+			y++;
+			x = 0;
+			if (blocked || placed)
+				break;
+		}
 
-			if (!blocked && placed)
-			{
-				var block_tag:String = 'stone';
+		if (!blocked && placed)
+		{
+			var block_tag:String = 'stone';
 
-				var block:Block = new Block(block_tag, 0, 0);
-				block.scale.set(blockScale, blockScale);
-				block.setPosition(MouseBlock.x, MouseBlock.y);
-				worldBlocks.add(block);
-			}
+			var block:Block = new Block(block_tag, 0, 0);
+			block.scale.set(blockScale, blockScale);
+			block.setPosition(MouseBlock.x, MouseBlock.y);
+			worldBlocks.add(block);
 		}
 	}
 }
