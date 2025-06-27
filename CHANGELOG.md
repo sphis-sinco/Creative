@@ -1,4 +1,7 @@
 # 2025-06-27
+## [Unreleased]
+- All textures were modified
+
 ## 0.1.1
 - Stone texture was modified
 - World Generation has been modified
