@@ -1,4 +1,8 @@
 # 2025-06-27
+## 0.2.1
+- Debug text is not visible outside of debug builds
+- Code has been organized
+
 ## 0.2.0
 - Added block placing
 - Issue templates have been updated
