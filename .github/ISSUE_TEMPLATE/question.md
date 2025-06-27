@@ -2,7 +2,7 @@
 name: Question
 about: Ask a question about the game
 title: "[QUESTION] "
-labels: 'Priority: Low, Response: Unknown, Status: Question'
+labels: 'question'
 assignees: ''
 
 ---

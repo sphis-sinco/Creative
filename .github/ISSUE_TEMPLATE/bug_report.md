@@ -2,7 +2,7 @@
 name: Bug report
 about: Create a report on an issue with the game
 title: "[BUG] "
-labels: 'Priority: Low, Response: Unknown, Status: Bug'
+labels: 'bug'
 assignees: ''
 
 ---

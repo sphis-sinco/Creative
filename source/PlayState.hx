@@ -1,7 +1,9 @@
 package;
 
+import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxRandom;
 import flixel.text.FlxText;
+import flixel.util.FlxSort;
 
 class PlayState extends FlxState
 {
@@ -18,7 +20,7 @@ class PlayState extends FlxState
 		'stone': 8,
 	};
 
-	public var worldBlocks:Array<Block> = [];
+	public var worldBlocks:FlxTypedGroup<Block> = new FlxTypedGroup<Block>();
 
 	public function worldRender()
 	{
@@ -27,7 +29,6 @@ class PlayState extends FlxState
 		#end
 		for (block in worldBlocks)
 		{
-			add(block);
 			block.x += block.width * 1.5;
 			block.y += block.height;
 		}
@@ -39,7 +40,14 @@ class PlayState extends FlxState
 		trace('worldInit');
 		#end
 
-		worldBlocks = [];
+		if (worldBlocks.length > 0)
+		{
+			for (block in worldBlocks)
+			{
+				block.destroy();
+				worldBlocks.remove(block, true);
+			}
+		}
 
 		var x:Int = 0;
 		var y:Int = 0;
@@ -66,7 +74,7 @@ class PlayState extends FlxState
 				block.setPosition(x * (x > 0 ? (blockScale * block.width) : 1), y * (y > 0 ? (blockScale * block.height) : 1));
 
 				if (block_tag != 'air')
-					worldBlocks.push(block);
+					worldBlocks.add(block);
 				x++;
 			}
 			y++;
@@ -79,8 +87,6 @@ class PlayState extends FlxState
 	override public function create():Void
 	{
 		super.create();
-
-		worldInit();
 
 		var VersionText:FlxText = new FlxText(10, 10, 0, 'Creative ' + Version.generateVersionString(true, true, true), 16);
 		add(VersionText);
@@ -95,9 +101,12 @@ class PlayState extends FlxState
 		add(WorldHeightText);
 
 		FlxG.camera.zoom = zoom;
+
 		MouseBlock = new FlxSprite(0, 0).loadGraphic(FileManager.getImageFile('outline'));
 		MouseBlock.scale.set(blockScale, blockScale);
 
+		worldInit();
+		add(worldBlocks);
 		add(MouseBlock);
 	}
 
@@ -138,6 +147,52 @@ class PlayState extends FlxState
 				}
 			}
 		}
-	}
+		else if (FlxG.mouse.justReleased)
+		{
+			var x:Int = 0;
+			var y:Int = 0;
+			var blocked:Bool = false;
+			var placed:Bool = false;
 
+			while (y < worldHeight)
+			{
+				while (x < worldWidth)
+				{
+					for (block in worldBlocks)
+					{
+						if (MouseBlock.overlaps(block))
+						{
+							trace('block in the way');
+							blocked = true;
+							placed = false;
+							break;
+						}
+						else
+						{
+							placed = true;
+						}
+					}
+
+					x++;
+
+					if (blocked || placed)
+						break;
+				}
+				y++;
+				x = 0;
+				if (blocked || placed)
+					break;
+			}
+
+			if (!blocked && placed)
+			{
+				var block_tag:String = 'stone';
+
+				var block:Block = new Block(block_tag, 0, 0);
+				block.scale.set(blockScale, blockScale);
+				block.setPosition(MouseBlock.x, MouseBlock.y);
+				worldBlocks.add(block);
+			}
+		}
+	}
 }

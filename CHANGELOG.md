@@ -1,5 +1,7 @@
 # 2025-06-27
 ## 0.2.0
+- Added block placing
+- Issue templates have been updated
 - Debug tools are debug compiler flag exclusive
 - Added block removal
 - Added 'flixel-addons' library
