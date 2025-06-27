@@ -7,6 +7,8 @@ class Block extends FlxSprite
 		super(X, Y);
 
 		loadGraphic(FileManager.getImageFile('blocks/blocks-$Block'));
+		#if BLOCK_TRACES
 		trace('New block: $Block at x: $X, y: $Y');
+		#end
 	}
 }
