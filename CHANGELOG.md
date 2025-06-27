@@ -1,5 +1,5 @@
 # 2025-06-27
-## [Unreleased]
+## 0.1.2
 - All textures were modified
 
 ## 0.1.1
