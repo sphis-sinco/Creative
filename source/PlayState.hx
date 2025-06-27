@@ -23,6 +23,9 @@ class PlayState extends FlxState
 	};
 
 	public var blocks:Array<String> = ['stone', 'grass', 'dirt'];
+	public var wools:Array<String> = [
+		'red', 'orange', 'yellow', 'green', 'lime', 'cyan', 'blue', 'purple', 'pink', 'brown', 'gray', 'white', 'black'
+	];
 
 	public var worldBlocks:FlxTypedGroup<Block> = new FlxTypedGroup<Block>();
 
@@ -96,6 +99,11 @@ class PlayState extends FlxState
 	override public function create():Void
 	{
 		super.create();
+
+		for (wool in wools)
+		{
+			blocks.push('${wool}_wool');
+		}
 
 		var VersionText:FlxText = new FlxText(10, 10, 0, 'Creative ' + Version.generateVersionString(true, true, true), 16);
 		add(VersionText);
