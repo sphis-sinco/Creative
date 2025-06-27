@@ -17,6 +17,8 @@ class PlayState extends FlxState
 	public var worldLayers = {
 		'grass': 11,
 		'dirt': 10,
+		'dirt_offset_min': 0,
+		'dirt_offset_max': 3,
 		'stone': 8,
 	};
 
@@ -75,7 +77,7 @@ class PlayState extends FlxState
 
 		if (y > worldHeight - worldLayers.grass)
 			block_tag = 'grass';
-		final dirtRandom:Int = new FlxRandom().int(0, 3);
+		final dirtRandom:Int = new FlxRandom().int(worldLayers.dirt_offset_min, worldLayers.dirt_offset_max);
 		if (y > worldHeight - (worldLayers.dirt))
 			block_tag = 'dirt';
 		if (y > worldHeight - (worldLayers.stone - dirtRandom))

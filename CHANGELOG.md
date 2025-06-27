@@ -1,5 +1,6 @@
 # 2025-06-27
 ## 0.2.1
+- Dirt layer offset is "softcoded" into the `worldLayers` variable
 - Debug text is not visible outside of debug builds
 - Code has been organized
 
