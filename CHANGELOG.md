@@ -1,5 +1,7 @@
 # 2025-06-27
 ## 0.1.2
+- PlayState version text has 'Creative' infront of it
+- More World Generation modifications
 - All textures were modified
 
 ## 0.1.1

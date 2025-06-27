@@ -1,5 +1,6 @@
 package;
 
+import flixel.math.FlxRandom;
 import flixel.text.FlxText;
 
 class PlayState extends FlxState
@@ -52,9 +53,10 @@ class PlayState extends FlxState
 
 				if (y > worldHeight - worldLayers.grass)
 					block_tag = 'grass';
-				if (y > worldHeight - worldLayers.dirt)
+				final dirtRandom:Int = new FlxRandom().int(0, 3);
+				if (y > worldHeight - (worldLayers.dirt))
 					block_tag = 'dirt';
-				if (y > worldHeight - worldLayers.stone)
+				if (y > worldHeight - (worldLayers.stone - dirtRandom))
 					block_tag = 'stone';
 
 				var block:Block = new Block(block_tag, 0, 0);
@@ -76,7 +78,7 @@ class PlayState extends FlxState
 		super.create();
 
 		worldInit();
-		var VersionText:FlxText = new FlxText(10, 10, 0, Version.generateVersionString(true, true, true), 16);
+		var VersionText:FlxText = new FlxText(10, 10, 0, 'Creative ' + Version.generateVersionString(true, true, true), 16);
 		add(VersionText);
 		VersionText.scrollFactor.set(0, 0);
 	}
