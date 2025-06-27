@@ -64,5 +64,9 @@ class PlayState extends FlxState
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
+		if (FlxG.keys.justReleased.Q)
+			FlxG.camera.zoom -= 0.5;
+		else if (FlxG.keys.justReleased.E)
+			FlxG.camera.zoom += 0.5;
 	}
 }
