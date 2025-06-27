@@ -2,7 +2,7 @@ package;
 
 class PlayState extends FlxState
 {
-	public var blockScale:Int = 6;
+	public var blockScale:Int = 2;
 
 	public var worldWidth:Int = 16;
 	public var worldHeight:Int = 9;
@@ -35,19 +35,19 @@ class PlayState extends FlxState
 
 		while (y < worldHeight)
 		{
-			while (x < worldWidth)
+			while (x < worldWidth + 1)
 			{
-				x++;
 				trace('$x|$y');
 				if (y < worldHeight - worldLayers.stone)
 				{
-					var block:Block = new Block('stone', x * blockScale, y * blockScale);
+					var block:Block = new Block('stone', 0, 0);
 					block.scale.set(blockScale, blockScale);
+					block.setPosition(x * (x > 0 ? (blockScale * block.width) : 1), y * (y > 0 ? (blockScale * block.height) : 1));
 
 					worldBlocks.push(block);
 				}
+				x++;
 			}
-
 			y++;
 			x = 0;
 		}
