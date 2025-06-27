@@ -118,11 +118,16 @@ class PlayState extends FlxState
 			blocks.remove('air');
 			blocks.remove('blocks.aseprite');
 
+			#if BLOCK_TRACES
 			trace(blocks);
+			#end
 		}
 		#end
 
-		var VersionText:FlxText = new FlxText(10, 10, 0, 'Creative ' + Version.generateVersionString(true, true, true), 16);
+		var VersionText:FlxText = new FlxText(10, 10, 0, 'Creative '
+			+ #if sys '(sys, press A to leave)' #else '(not sys, press ESCAPE to leave)' #end
+			+ ' ${SLGame.isDebug ? '(Debug)' : ''} '
+			+ Version.generateVersionString(true, true, true), 16);
 		add(VersionText);
 		VersionText.scrollFactor.set(0, 0);
 		#if debug
@@ -310,6 +315,11 @@ class PlayState extends FlxState
 			saveWorld();
 		if (FlxG.keys.justReleased.ENTER)
 			loadWorld();
+		if (FlxG.keys.justReleased.A)
+			FlxG.switchState(() -> new MenuState());
+		#else
+		if (FlxG.keys.justReleased.ESCAPE)
+			FlxG.switchState(() -> new MenuState());
 		#end
 	}
 

@@ -1,5 +1,10 @@
 # 2025-06-27
 ## 0.3.0
+- In PlayState the array of blocks generated from the blocks image folder trace now required the BLOCK_TRACES conditional
+- In PlayState it displays the control to leave the state
+- In PlayState it displays if you support sys
+- In PlayState it displays if you are in debug
+- In PlayState you can leave to the MenuState by pressing A or ESCAPE
 - Added a blank world type playable through the main menu
 - When loading a world you can now add an optional argument to load a specific file
 - Removed FlxButtonPlus from PlayState
