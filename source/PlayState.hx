@@ -176,7 +176,9 @@ class PlayState extends FlxState
 				{
 					if (MouseBlock.overlaps(block))
 					{
-						trace('block in the way');
+						#if BLOCK_TRACES
+						trace('${block.block_tag} block in the way');
+						#end
 						blocked = true;
 						placed = false;
 						break;

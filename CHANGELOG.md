@@ -1,5 +1,8 @@
 # 2025-06-27
 ## 0.2.1
+- Block traces related to a block being in the way of placing a block now requires the BLOCK_TRACES conditional
+- Block traces related to a block being in the way of placing a block now include the block_tag
+- Added block_tag variable to the Block class
 - Dirt layer offset is "softcoded" into the `worldLayers` variable
 - Debug text is not visible outside of debug builds
 - Code has been organized
