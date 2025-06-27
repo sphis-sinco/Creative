@@ -1,3 +1,6 @@
+# 0.1.1
+- Version text
+
 # 0.1.0_01
 - Hxcpp is added to the hmm.json
 - Sinlib is removed from the hmm.json

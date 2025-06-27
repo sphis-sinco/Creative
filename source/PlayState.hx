@@ -1,5 +1,7 @@
 package;
 
+import flixel.text.FlxText;
+
 class PlayState extends FlxState
 {
 	public var blockScale:Int = 2;
@@ -61,6 +63,9 @@ class PlayState extends FlxState
 		super.create();
 
 		worldInit();
+		var VersionText:FlxText = new FlxText(10, 10, 0, Version.generateVersionString(true, true, true), 16);
+		add(VersionText);
+		VersionText.scrollFactor.set(0, 0);
 	}
 
 	override public function update(elapsed:Float):Void
