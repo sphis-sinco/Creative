@@ -1,5 +1,7 @@
 # 2025-06-27
 ## 0.3.0
+- Removed FlxButtonPlus from PlayState
+- Added 'flixel-ui' library
 - Added main menu with a logo
 
 ## 0.2.3

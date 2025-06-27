@@ -1,6 +1,5 @@
 package;
 
-import flixel.addons.ui.FlxButtonPlus;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxRandom;
 import flixel.text.FlxText;
@@ -217,8 +216,6 @@ class PlayState extends FlxState
 
 	var new_tag:String;
 	var new_tag_id:Int = 0;
-
-	var saveWorldButton:FlxButtonPlus;
 
 	override public function update(elapsed:Float):Void
 	{
