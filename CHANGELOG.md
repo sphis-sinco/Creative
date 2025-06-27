@@ -1,5 +1,6 @@
 # 2025-06-27
-## 0.1.2
+## 0.2.0
+- Added block removal
 - Added 'flixel-addons' library
 - Added "MouseBlock"
 - Fixed World width

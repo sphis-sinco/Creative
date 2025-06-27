@@ -121,8 +121,21 @@ class PlayState extends FlxState
 
 		if (FlxG.keys.anyJustReleased([Q, E, Z, X]))
 			FlxG.resetState();
+
 		MouseBlock.x = (Math.floor(FlxG.mouse.x / (16 * blockScale)) * (16 * blockScale) + (16 * 1.5));
 		MouseBlock.y = (Math.floor(FlxG.mouse.y / (16 * blockScale)) * (16 * blockScale) + 16);
+		if (FlxG.mouse.justReleased)
+		{
+			for (block in worldBlocks)
+			{
+				if (MouseBlock.overlaps(block))
+				{
+					block.destroy();
+					worldBlocks.remove(block);
+					break;
+				}
+			}
+		}
 	}
 
 }
