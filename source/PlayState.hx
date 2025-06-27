@@ -138,14 +138,12 @@ class PlayState extends FlxState
 	}
 
 	var _file:FileReference;
-	
+
 	function saveWorld() {
-		var json = {
+		var data:String = haxe.Json.stringify({
 			"version": Version.generateVersionString(true, true, true),
 			"worldBlocks": worldBlocks
-		}
-
-		var data:String = haxe.Json.stringify(json, "\t");
+		}, "\t");
 
 		if ((data != null) && (data.length > 0))
 		{
