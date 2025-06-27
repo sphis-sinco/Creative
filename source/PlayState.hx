@@ -9,6 +9,7 @@ class PlayState extends FlxState
 
 	public var worldLayers = {
 		'grass': 0,
+		'dirt': 0,
 		'stone': 0,
 	};
 
