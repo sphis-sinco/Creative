@@ -1,5 +1,10 @@
 # 2025-06-27
 ## 0.1.1
+- Stone texture was modified
+- World Generation has been modified
+- Grass, Dirt, and Stone generation layers have been set
+- Block name suffixes are now required to be lowercase
+- Added new blocks: Dirt, Grass, and air
 - Changelog now has date headers
 - WORLD_RENDERING_TRACES Conditional added to clean up traces
 - BLOCK_TRACES Conditional added to clean up traces
@@ -28,4 +33,4 @@
 - Blocks now have their own folder and are exported and expected like this: 'blocks-stone'
 
 ## [0.0.1](https://github.com/sphis-sinco/Creative/commit/06a7fb2f5b1a7ffa01460ddbce93d5f45f488ab8)
-- Block atlas
+- Block atlas (Stone)

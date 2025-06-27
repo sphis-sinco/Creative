@@ -6,7 +6,7 @@ class Block extends FlxSprite
 	{
 		super(X, Y);
 
-		loadGraphic(FileManager.getImageFile('blocks/blocks-$Block'));
+		loadGraphic(FileManager.getImageFile('blocks/blocks-${Block.toLowerCase()}'));
 		#if BLOCK_TRACES
 		trace('New block: $Block at x: $X, y: $Y');
 		#end

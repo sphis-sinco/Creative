@@ -10,9 +10,9 @@ class PlayState extends FlxState
 	public var worldHeight:Int = 22;
 
 	public var worldLayers = {
-		'grass': 0,
-		'dirt': 0,
-		'stone': 0,
+		'grass': 11,
+		'dirt': 10,
+		'stone': 8,
 	};
 
 	public var worldBlocks:Array<Block> = [];
@@ -48,14 +48,21 @@ class PlayState extends FlxState
 				#if WORLD_RENDERING_TRACES
 				trace('$x|$y');
 				#end
-				if (y < worldHeight - worldLayers.stone)
-				{
-					var block:Block = new Block('stone', 0, 0);
-					block.scale.set(blockScale, blockScale);
-					block.setPosition(x * (x > 0 ? (blockScale * block.width) : 1), y * (y > 0 ? (blockScale * block.height) : 1));
+				var block_tag:String = 'air';
 
+				if (y > worldHeight - worldLayers.grass)
+					block_tag = 'grass';
+				if (y > worldHeight - worldLayers.dirt)
+					block_tag = 'dirt';
+				if (y > worldHeight - worldLayers.stone)
+					block_tag = 'stone';
+
+				var block:Block = new Block(block_tag, 0, 0);
+				block.scale.set(blockScale, blockScale);
+				block.setPosition(x * (x > 0 ? (blockScale * block.width) : 1), y * (y > 0 ? (blockScale * block.height) : 1));
+
+				if (block_tag != 'air') 
 					worldBlocks.push(block);
-				}
 				x++;
 			}
 			y++;
