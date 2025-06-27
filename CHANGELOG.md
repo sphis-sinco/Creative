@@ -1,5 +1,6 @@
 # 2025-06-27
 ## 0.2.0
+- Debug tools are debug compiler flag exclusive
 - Added block removal
 - Added 'flixel-addons' library
 - Added "MouseBlock"

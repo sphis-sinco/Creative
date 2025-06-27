@@ -109,6 +109,7 @@ class PlayState extends FlxState
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
+		#if debug
 		if (FlxG.keys.justReleased.Q && zoom > 0.5)
 			zoom -= 0.5;
 		else if (FlxG.keys.justReleased.E && zoom < 2)
@@ -121,6 +122,7 @@ class PlayState extends FlxState
 
 		if (FlxG.keys.anyJustReleased([Q, E, Z, X]))
 			FlxG.resetState();
+		#end
 
 		MouseBlock.x = (Math.floor(FlxG.mouse.x / (16 * blockScale)) * (16 * blockScale) + (16 * 1.5));
 		MouseBlock.y = (Math.floor(FlxG.mouse.y / (16 * blockScale)) * (16 * blockScale) + 16);
