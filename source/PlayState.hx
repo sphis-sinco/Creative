@@ -124,7 +124,7 @@ class PlayState extends FlxState
 
 		MouseBlock.x = (Math.floor(FlxG.mouse.x / (16 * blockScale)) * (16 * blockScale) + (16 * 1.5));
 		MouseBlock.y = (Math.floor(FlxG.mouse.y / (16 * blockScale)) * (16 * blockScale) + 16);
-		if (FlxG.mouse.justReleased)
+		if (FlxG.mouse.justReleasedRight)
 		{
 			for (block in worldBlocks)
 			{
