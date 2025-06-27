@@ -4,8 +4,8 @@ class PlayState extends FlxState
 {
 	public var blockScale:Int = 2;
 
-	public var worldWidth:Int = 16;
-	public var worldHeight:Int = 9;
+	public var worldWidth:Int = 32;
+	public var worldHeight:Int = 18;
 
 	public var worldLayers = {
 		'grass': 0,
