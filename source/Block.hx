@@ -4,12 +4,14 @@ class Block extends FlxSprite
 {
 	public var block_tag:String = '';
 	public var block_prefix:String = 'blocks';
+	public var placed:Bool = false;
 
-	override public function new(Block:String, X:Float, Y:Float, Custom_Path:Bool = false, custom_path_string:String = '')
+	override public function new(Block:String, X:Float, Y:Float, placed:Bool = true, Custom_Path:Bool = false, custom_path_string:String = '')
 	{
 		super(X, Y);
 
 		block_tag = Block;
+		this.placed = placed;
 		changeBlock(block_tag, Custom_Path, custom_path_string);
 		#if BLOCK_TRACES
 		trace('New $Block block: $Block at x: $X, y: $Y');
@@ -31,8 +33,9 @@ class Block extends FlxSprite
 				{
 					block_prefix = NewBlocks.NEW_BLOCK_PREFIXES[i];
 					cps = NewBlocks.NEW_BLOCK_MOD_NAMES[i];
-					if (!PlayState.REQUIRED_PACKS.contains(cps))
+					if (!PlayState.REQUIRED_PACKS.contains(cps) && placed)
 					{
+						trace(cps);
 						PlayState.REQUIRED_PACKS.push(cps);
 					}
 				}

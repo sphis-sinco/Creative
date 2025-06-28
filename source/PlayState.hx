@@ -247,7 +247,7 @@ class PlayState extends State
 			worldInit();
 			initedWorldBlocks = true;
 		}
-		CurrentBlock = new Block('stone', verText.x + verText.width + 10, 10);
+		CurrentBlock = new Block('stone', verText.x + verText.width + 10, 10, false);
 		CurrentBlock.scale.set(blockScale, blockScale);
 		add(CurrentBlock);
 
