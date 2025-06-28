@@ -1,5 +1,6 @@
 package;
 
+import flixel.addons.ui.FlxUIInputText;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
 import flixel.math.FlxRandom;
@@ -77,6 +78,7 @@ class PlayState extends State
 		'emerald_ore',
 		'rainbow',
 	];
+
 	public var wools:Array<String> = [
 		'red', 'orange', 'yellow', 'green', 'lime', 'cyan', 'blue', 'purple', 'pink', 'brown', 'gray', 'white', 'black'
 	];
@@ -165,6 +167,8 @@ class PlayState extends State
 
 	public static var verText:FlxText;
 
+	public static var saveName:FlxUIInputText;
+
 	override public function create():Void
 	{
 		super.create();
@@ -216,8 +220,6 @@ class PlayState extends State
 		add(verText);
 		verText.scrollFactor.set(0, 0);
 
-
-
 		FlxG.camera.zoom = zoom;
 
 		MouseBlock = new MouseBlock(0, 0);
@@ -236,13 +238,18 @@ class PlayState extends State
 
 		CurrentBlockText = new FlxText(CurrentBlock.x + CurrentBlock.width + 10, CurrentBlock.y, 0, 'stone', 16);
 		add(CurrentBlockText);
+		saveName = new FlxUIInputText(0, 0, 666, 'save', 16);
+		add(saveName);
+		saveName.setPosition(verText.x, verText.y + verText.height + 10);
 
 		add(MouseBlock);
 	}
 
 	#if sys
-	function saveWorld()
+	function saveWorld(file:String = 'save')
 	{
+		trace('Saving $file');
+
 		var worldData = [];
 
 		if (worldBlocks.length > 0)
@@ -259,20 +266,22 @@ class PlayState extends State
 			}
 		}
 
+		var worldNameSplit = file.split('/');
+		var world_name = worldNameSplit[worldNameSplit.length - 1];
+
 		var data:WorldSave = {
 			block_data_version: 3,
 			version: Version.generateVersionString(true, true, true),
-			world: worldData
+			world: worldData,
+			world_name: world_name
 		};
 
-		#if desktop
-		FileManager.writeToPath('save.json', Json.stringify(data));
-		#end
+		FileManager.writeToPath('$file.json', Json.stringify(data));
 	}
 
 	public static function loadWorld(file:String = 'save')
 	{
-		var data:WorldSave = #if desktop FileManager.getJSON('$file.json'); #end
+		var data:WorldSave = FileManager.getJSON('$file.json');
 
 		if (Json.stringify(data) == '' || data.world == null)
 			return;
@@ -292,6 +301,8 @@ class PlayState extends State
 			block.scale.set(blockScale, blockScale);
 			worldBlocks.add(block);
 		}
+		if (data.world_name != null)
+			saveName.text = data.world_name;
 	}
 	#end
 
@@ -303,30 +314,36 @@ class PlayState extends State
 	var new_tag:String;
 	var new_tag_id:Int = 0;
 
+	var inputText_hasFocus:Bool = false;
+
+	var non_valid_save_names:Array<String> = ['save', ''];
+
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
 		CurrentBlockText.text = CurrentBlock.block_tag;
 
+		inputText_hasFocus = saveName.hasFocus || PlaystateDebugSubState.commandInput.hasFocus;
+
 		if (new_tag != CurrentBlock.block_tag)
 			new_tag = CurrentBlock.block_tag;
 
 		#if debug
-		if (FlxG.keys.justReleased.Q && zoom > 0.5 && !PlaystateDebugSubState.commandInput.hasFocus)
+		if (FlxG.keys.justReleased.Q && zoom > 0.5 && !inputText_hasFocus)
 			zoom -= 0.5;
-		else if (FlxG.keys.justReleased.E && zoom < 2 && !PlaystateDebugSubState.commandInput.hasFocus)
+		else if (FlxG.keys.justReleased.E && zoom < 2 && !inputText_hasFocus)
 			zoom += 0.5;
 
-		if (FlxG.keys.justReleased.Z && worldWidth > 1 && !PlaystateDebugSubState.commandInput.hasFocus)
+		if (FlxG.keys.justReleased.Z && worldWidth > 1 && !inputText_hasFocus)
 			worldWidth -= 1;
-		else if (FlxG.keys.justReleased.X && worldWidth < 50 && !PlaystateDebugSubState.commandInput.hasFocus)
+		else if (FlxG.keys.justReleased.X && worldWidth < 50 && !inputText_hasFocus)
 			worldWidth += 1;
 
-		if (FlxG.keys.anyJustReleased([Q, E, Z, X]) && !PlaystateDebugSubState.commandInput.hasFocus)
+		if (FlxG.keys.anyJustReleased([Q, E, Z, X]) && !inputText_hasFocus)
 			FlxG.resetState();
 		#end
 
-		if (FlxG.mouse.justReleasedRight && !PlaystateDebugSubState.commandInput.hasFocus)
+		if (FlxG.mouse.justReleasedRight && !inputText_hasFocus)
 		{
 			for (block in worldBlocks)
 			{
@@ -338,12 +355,12 @@ class PlayState extends State
 				}
 			}
 		}
-		else if (FlxG.mouse.justReleased && !PlaystateDebugSubState.commandInput.hasFocus)
+		else if (FlxG.mouse.justReleased && !inputText_hasFocus)
 		{
 			placeBlock();
 		}
 
-		if (FlxG.keys.anyJustReleased([LEFT, RIGHT]) && !PlaystateDebugSubState.commandInput.hasFocus)
+		if (FlxG.keys.anyJustReleased([LEFT, RIGHT]) && !inputText_hasFocus)
 		{
 			var i:Int = 0;
 			for (block in blocks)
@@ -374,17 +391,27 @@ class PlayState extends State
 			CurrentBlock.changeBlock(new_tag);
 		}
 		#if sys
-		if (FlxG.keys.justReleased.ESCAPE && !PlaystateDebugSubState.commandInput.hasFocus)
-			saveWorld();
-		if (FlxG.keys.justReleased.ENTER && !PlaystateDebugSubState.commandInput.hasFocus)
-			loadWorld();
-		if (FlxG.keys.justReleased.A && !PlaystateDebugSubState.commandInput.hasFocus)
+		if (FlxG.keys.justReleased.ESCAPE && !inputText_hasFocus)
+		{
+			saveWorld('save');
+			if (!non_valid_save_names.contains(saveName.text.toLowerCase()))
+				saveWorld('customsaves/' + saveName.text);
+		}
+		if (FlxG.keys.justReleased.ENTER && !inputText_hasFocus)
+		{
+			if (FileManager.exists('customsaves/' + saveName.text + '.json')
+				&& !non_valid_save_names.contains(saveName.text.toLowerCase()))
+				loadWorld('customsaves/' + saveName.text);
+			else
+				loadWorld();
+		}
+		if (FlxG.keys.justReleased.A && !inputText_hasFocus)
 			FlxG.switchState(() -> new MenuState());
 		#else
-		if (FlxG.keys.justReleased.ESCAPE && !PlaystateDebugSubState.commandInput.hasFocus)
+		if (FlxG.keys.justReleased.ESCAPE && !inputText_hasFocus)
 			FlxG.switchState(() -> new MenuState());
 		#end
-		if (FlxG.keys.justReleased.SEVEN)
+		if (FlxG.keys.justReleased.SEVEN && !inputText_hasFocus)
 		{
 			if (!PlaystateDebugSubState.inited)
 				PlaystateDebugSubState.init();

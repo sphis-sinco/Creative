@@ -1,5 +1,7 @@
 # 2025-06-28
 ## 0.3.4
+- Added saving and loading with custom names support
+- New input field for save name
 - Debug substate worldWidth and worldHeight texts have been moved
 - Added new splash texts
 

@@ -38,13 +38,8 @@ class PlaystateDebugSubState extends FlxSubState
 		black.alpha = 0.5;
 		add(black);
 
-		commandInput.setPosition(PlayState.CurrentBlockText.x + PlayState.CurrentBlockText.width + 10, PlayState.CurrentBlockText.y);
-
 		WorldWidthText.text = 'World width: ' + Std.string(PlayState.worldWidth);
 		WorldHeightText.text = 'World height: ' + Std.string(PlayState.worldHeight);
-
-		WorldWidthText.setPosition(commandInput.x, 10 + commandInput.y + commandInput.height);
-		WorldHeightText.setPosition(10 + WorldWidthText.x + WorldWidthText.width, WorldWidthText.y);
 
 		add(WorldWidthText);
 		add(WorldHeightText);
@@ -59,9 +54,11 @@ class PlaystateDebugSubState extends FlxSubState
 
                 
 		PlayState.TYPING = commandInput.hasFocus;
-		commandInput.setPosition(PlayState.CurrentBlockText.x + PlayState.CurrentBlockText.width + 10, PlayState.CurrentBlockText.y);
-		commandOutput.setPosition(commandInput.x, commandInput.y + commandInput.height + 10);
 
+		commandInput.setPosition(PlayState.CurrentBlockText.x + PlayState.CurrentBlockText.width + 10, PlayState.CurrentBlockText.y);
+		WorldWidthText.setPosition(commandInput.x, 10 + commandInput.y + commandInput.height);
+		WorldHeightText.setPosition(10 + WorldWidthText.x + WorldWidthText.width, WorldWidthText.y);
+		commandOutput.setPosition(commandInput.x, WorldHeightText.y + WorldHeightText.height + 10);
 		
 		if (FlxG.keys.justReleased.ENTER && PlaystateDebugSubState.commandInput.hasFocus)
 		{

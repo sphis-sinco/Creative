@@ -276,6 +276,11 @@ class FileManager {
 	public static function writeToPath(path:String, content:String):Void {
 		#if sys
 		if (path.length > 0) {
+			if (!readDirectory('').contains(path.split('/')[0]))
+				FileSystem.createDirectory(path.split('/')[0]);
+
+			if (!exists(path))
+				File.write(path, false);
 			File.saveContent(path, content);
 		} else {
 			throw 'A path is required.';
@@ -381,6 +386,4 @@ class FileManager {
  */
 enum abstract PathTypes(String) from String to String {
 	public var DEFAULT:String = '';
-	public var CUTSCENES:String = 'cutscenes/';
-	public var STICKERS:String = 'stickers/';
 }
