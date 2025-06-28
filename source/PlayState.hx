@@ -206,6 +206,8 @@ class PlayState extends State
 		{
 			blocks.push(block);
 		}
+		trace(blocks);
+
 		#if sys
 		if (SettingsMenu.Settings.auto_gen_block_list)
 		{
