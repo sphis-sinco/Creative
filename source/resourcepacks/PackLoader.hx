@@ -48,7 +48,7 @@ class PackLoader
 
 					RESOURCE_PACKS.push(pack);
 					RESOURCE_PACK_LOCATIONS.push(location.replace('/$item', ''));
-					packlist += '$item\n';
+					packlist += '$folder\n';
 				}
 			}
 		}
