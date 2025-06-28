@@ -2,7 +2,9 @@ package;
 
 import flixel.addons.ui.FlxButtonPlus;
 import flixel.addons.ui.FlxUIDropDownMenu;
+import flixel.math.FlxRandom;
 import flixel.text.FlxText;
+import flixel.util.FlxColor;
 
 class MenuState extends FlxState
 {
@@ -27,6 +29,11 @@ class MenuState extends FlxState
 		logo.scale.set(1 / 6, 1 / 6);
 		logo.screenCenter(X);
 		logo.y -= (logo.height / 3);
+
+		var splashes:Array<String> = FileManager.readFile(FileManager.getDataFile('splash.txt')).split('\n');
+		var splashText:FlxText = new FlxText(logo.x + logo.width, logo.y + logo.height, 0, splashes[new FlxRandom().int(0, splashes.length - 1)], 16);
+		splashText.color = FlxColor.YELLOW;
+		add(splashText);
 
 		var playRegular:FlxButtonPlus = new FlxButtonPlus(0, 0, () ->
 		{
