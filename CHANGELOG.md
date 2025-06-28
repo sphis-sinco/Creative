@@ -1,4 +1,7 @@
 # 2025-06-28
+## 0.3.4
+- Added new splash texts
+
 ## 0.3.3_02
 - Changelog dates fixed
 - Code optimizations were made
