@@ -7,6 +7,9 @@ class MenuState extends FlxState
 {
 	public static var btnWidth:Int = 200;
 
+	public var present:String = 'blank';
+	public var presents:Array<String> = ['blank'];
+
 	override function create()
 	{
 		super.create();
@@ -32,8 +35,8 @@ class MenuState extends FlxState
 
 		var playBlank:FlxButtonPlus = new FlxButtonPlus(0, 0, () ->
 		{
-			FlxG.switchState(() -> new PlayState('assets/templates/blank'));
-		}, 'Play (Blank world)', btnWidth);
+			FlxG.switchState(() -> new PlayState('assets/templates/$present'));
+		}, 'Play (World presents)', btnWidth);
 		add(playBlank);
 		playBlank.screenCenter();
 		playBlank.scale.set(2, 2);
