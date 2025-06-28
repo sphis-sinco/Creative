@@ -1,11 +1,12 @@
 # 2025-06-27
 ## 0.3.0
+- PlayState auto-block-list generation doesn't include any files that aren't a png
 - Added animated block support via a simple json file (example with the [new lava animated block](./assets/images/blocks/blocks-lava.json))
 - Added several new blocks
 - Added a inferno world present playable through the main menu
 - Added present list dropdown to the mainmenu to select other presents when they are added
 - Removed new_tag_id trace
-- Added Autogenerate block list option
+- Added Auto-generate block list option
 - Added SettingsMenu
 - In PlayState the array of blocks generated from the blocks image folder trace now required the BLOCK_TRACES conditional
 - In PlayState it displays the control to leave the state

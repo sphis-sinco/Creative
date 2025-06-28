@@ -162,11 +162,11 @@ class PlayState extends FlxState
 				blocks = [];
 				for (block in blocksArr)
 				{
-					blocks.push(block.replace('blocks-', '').replace('.png', ''));
+					if (block.endsWith('.png'))
+						blocks.push(block.replace('blocks-', '').replace('.png', ''));
 				}
 
 				blocks.remove('air');
-				blocks.remove('blocks.aseprite');
 
 				#if BLOCK_TRACES
 				trace(blocks);
