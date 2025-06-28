@@ -10,7 +10,6 @@
 - Fixed portal block not being animated
 
 ## 0.4.0
-- Accidentally left in 2 example_packs
 - When a save path isnt found, `save.json` isn't loaded
 - Added more blocks
 - Added app icon
