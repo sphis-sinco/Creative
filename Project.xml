@@ -34,8 +34,11 @@
 
 	<source path="source" />
 	<assets path="assets" />
+	<assets path="resourcepacks" />
+
 	<assets path="save.json" />
 	<assets path="settings.json" />
+
 	<assets path="blank.json" rename="assets/templates/blank.json"/>
 
 	<!-- _______________________________ Libraries ______________________________ -->
