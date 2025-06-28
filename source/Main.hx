@@ -10,5 +10,6 @@ class Main extends Sprite
 		addChild(new FlxGame(0, 0, MenuState));
 		trace(Version.generateVersionString(true, true, true));
 		PackLoader.loadResourcePacks();
+		SettingsMenu.loadSettings();
 	}
 }

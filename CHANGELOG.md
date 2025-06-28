@@ -1,5 +1,6 @@
 # 2025-06-28
 ## 0.4.0
+- Fixed bug where saved settings weren't applied
 - Added resourcepacks (mod support)
 - Buttons related to the save location are hidden when the compiled build doesn't support sys
 

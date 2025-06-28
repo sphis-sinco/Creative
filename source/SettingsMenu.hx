@@ -10,6 +10,11 @@ class SettingsMenu extends FlxState
 
         var autoGenerateBlockList:FlxButtonPlus;
 
+	public static function loadSettings()
+	{
+		Settings = FileManager.getJSON('settings.json');
+	}
+
         override function create() {
                 super.create();
 
