@@ -1,5 +1,6 @@
 # 2025-06-28
 ## 0.3.4
+- Added keybind (ONE) to toggle the UI
 - New input field for save folder
 - Added saving and loading with custom names support
 - New input field for save name

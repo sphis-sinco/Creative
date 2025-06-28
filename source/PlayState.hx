@@ -425,6 +425,14 @@ class PlayState extends State
 
 			openSubState(new PlaystateDebugSubState());
 		}
+		if (FlxG.keys.justReleased.ONE && !inputText_hasFocus)
+		{
+			verText.visible = !verText.visible;
+			CurrentBlock.visible = !CurrentBlock.visible;
+			CurrentBlockText.visible = !CurrentBlockText.visible;
+			saveName.visible = !saveName.visible;
+			saveFolder.visible = !saveFolder.visible;
+		}
 	}
 
 	public function placeBlock()
