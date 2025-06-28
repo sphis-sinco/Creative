@@ -221,7 +221,7 @@ class PlayState extends FlxState
 		CurrentBlockText = new FlxText(CurrentBlock.x + CurrentBlock.width + 10, CurrentBlock.y, 0, 'stone', 16);
 		add(CurrentBlockText);
 
-		commandInput = new FlxUIInputText(CurrentBlockText.x + CurrentBlockText.width + 10, CurrentBlockText.y, 300, 16);
+		commandInput = new FlxUIInputText(CurrentBlockText.x + CurrentBlockText.width + 10, CurrentBlockText.y, 666, 16);
 		add(commandInput);
 
 		add(MouseBlock);
@@ -435,5 +435,38 @@ class PlayState extends FlxState
 			worldBlocks.add(block);
 		}
 	}
-	public function commandInputed() {}
+	public function commandInputed()
+	{
+		var args = commandInput.text.toLowerCase().split(' ');
+		commandInput.text = '';
+		commandInput.hasFocus = false;
+
+		switch (args[0])
+		{
+			case 'resetstate':
+				FlxG.resetState();
+			case 'resetgame':
+				FlxG.resetGame();
+			case 'setworld':
+				if (args[1] != null)
+					if (FileManager.exists(args[1]))
+						FlxG.switchState(() -> new PlayState(args[1]));
+					else
+						commandInput.text = 'Path doesn\'t exist';
+				else
+					commandInput.text = 'Path required';
+			case 'clearworld':
+				for (block in worldBlocks)
+					block.destroy();
+				worldBlocks.clear();
+			case 'regenworld':
+				for (block in worldBlocks)
+					block.destroy();
+				worldBlocks.clear();
+				worldInit();
+
+			default:
+				commandInput.text = 'Unknown command: "${commandInput.text}"';
+		}
+	}
 }
