@@ -5,6 +5,7 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
 import flixel.math.FlxRandom;
 import flixel.text.FlxText;
+import flixel.util.FlxColor;
 
 class PlayState extends FlxState
 {
@@ -223,13 +224,18 @@ class PlayState extends FlxState
 		CurrentBlockText = new FlxText(CurrentBlock.x + CurrentBlock.width + 10, CurrentBlock.y, 0, 'stone', 16);
 		add(CurrentBlockText);
 
-		commandInput = new FlxUIInputText(CurrentBlockText.x + CurrentBlockText.width + 10, CurrentBlockText.y, 666, 16);
+		commandInput = new FlxUIInputText(0, 0, 666, 16);
 		add(commandInput);
+
+		commandOutput = new FlxText(0, 0, 666, '', 16);
+		add(commandOutput);
+		commandOutput.color = FlxColor.WHITE;
 
 		add(MouseBlock);
 	}
 
 	var commandInput:FlxUIInputText;
+	var commandOutput:FlxText;
 
 	#if sys
 	function saveWorld()
@@ -307,6 +313,7 @@ class PlayState extends FlxState
 		super.update(elapsed);
 		CurrentBlockText.text = CurrentBlock.block_tag;
 		commandInput.setPosition(CurrentBlockText.x + CurrentBlockText.width + 10, CurrentBlockText.y);
+		commandOutput.setPosition(commandInput.x, commandInput.y + commandInput.height + 10);
 
 		if (new_tag != CurrentBlock.block_tag)
 			new_tag = CurrentBlock.block_tag;
@@ -438,6 +445,7 @@ class PlayState extends FlxState
 			worldBlocks.add(block);
 		}
 	}
+
 	public function commandInputed()
 	{
 		var args = commandInput.text.toLowerCase().split(' ');
@@ -455,9 +463,9 @@ class PlayState extends FlxState
 					if (FileManager.exists(args[1]))
 						FlxG.switchState(() -> new PlayState(args[1]));
 					else
-						commandInput.text = 'Path doesn\'t exist';
+						commandOutput.text = 'Path doesn\'t exist';
 				else
-					commandInput.text = 'Path required';
+					commandOutput.text = 'Path required';
 			case 'clearworld':
 				for (block in worldBlocks)
 					block.destroy();
@@ -467,9 +475,17 @@ class PlayState extends FlxState
 					block.destroy();
 				worldBlocks.clear();
 				worldInit();
+			case 'setselection':
+				if (args[1] != null)
+					if (blocks.contains(args[1].toLowerCase()))
+						CurrentBlock.changeBlock(args[1].toLowerCase());
+					else
+						commandOutput.text = 'Block doesn\'t exist';
+				else
+					commandOutput.text = 'Block required';
 
 			default:
-				commandInput.text = 'Unknown command: "${args[0]}"';
+				commandOutput.text = 'Unknown command: "${args[0]}"';
 		}
 	}
 }
