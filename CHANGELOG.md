@@ -1,6 +1,12 @@
 # 2025-06-27
 ## 0.3.2
 - Added command inputs
+        - resetState - resets PlayState
+        - resetGame - resets the game
+        - setworld PATH - loads a world path
+        - clearworld - clears the world
+        - regenworld - regenerates the world
+        - setSelection BLOCK_TAG - sets the current selection
 
 ## 0.3.1
 - Added more blocks
