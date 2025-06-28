@@ -5,6 +5,7 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
 import flixel.math.FlxRandom;
 import flixel.text.FlxText;
+import flixel.util.FlxColor;
 
 class PlayState extends State
 {
@@ -171,10 +172,12 @@ class PlayState extends State
 
 	public static var saveName:FlxUIInputText;
 	public static var saveFolder:FlxUIInputText;
+	public static var saveMsg:FlxText;
 
 	override public function create():Void
 	{
 		super.create();
+		REQUIRED_PACKS = [];
 
 		var skyBG:String = 'sky';
 		skyBG += present != '' ? '-$present' : '';
@@ -199,7 +202,6 @@ class PlayState extends State
 		{
 			blocks.push(block);
 		}
-
 		#if sys
 		if (SettingsMenu.Settings.auto_gen_block_list)
 		{
@@ -256,8 +258,14 @@ class PlayState extends State
 		#if sys add(saveFolder); #end
 		saveFolder.setPosition(saveName.x, saveName.y + saveName.height + 10);
 
+		saveMsg = new FlxText(saveFolder.x, saveFolder.y + saveFolder.height + 10, 666, '', 16);
+		saveMsg.color = FlxColor.WHITE;
+		#if sys add(saveMsg); #end
+
 		add(MouseBlock);
 	}
+
+	public static var REQUIRED_PACKS:Array<String> = [];
 
 	#if sys
 	function saveWorld(file:String = 'save')
@@ -287,7 +295,8 @@ class PlayState extends State
 			block_data_version: 3,
 			version: Version.generateVersionString(true, true, true),
 			world: worldData,
-			world_name: world_name
+			world_name: world_name,
+			required_packs: REQUIRED_PACKS
 		};
 
 		FileManager.writeToPath('$file.json', Json.stringify(data));
@@ -296,10 +305,48 @@ class PlayState extends State
 	public static function loadWorld(file:String = 'save')
 	{
 		trace('loading $file');
+		REQUIRED_PACKS = [];
 		var data:WorldSave = FileManager.getJSON('$file.json');
 
 		if (Json.stringify(data) == '' || data.world == null)
+		{
+			saveMsg.text = 'Null data';
 			return;
+		}
+
+		var packs = data.required_packs.length;
+		var curPacks = 0;
+
+		var missingPacks = [];
+		for (pack in data.required_packs)
+		{
+			missingPacks.push(pack);
+		}
+
+		var checkERPL:Dynamic = function(pack:String)
+		{
+			for (packLoc in PackLoader.ENABLED_RESOURCE_PACK_LOCATIONS)
+			{
+				if (packLoc.split('/')[1] == pack)
+				{
+					curPacks++;
+					trace('Has $pack');
+					missingPacks.remove(pack);
+				}
+			}
+		};
+
+		for (pack in data.required_packs)
+		{
+			trace('Checking for $pack');
+			checkERPL(pack);
+		}
+
+		if (packs > curPacks)
+		{
+			saveMsg.text = 'Missing packs $missingPacks';
+			return;
+		}
 
 		if (!initedWorldBlocks)
 			for (block in worldBlocks)

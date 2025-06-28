@@ -9,4 +9,5 @@ typedef WorldSave = {
 		var x:Float;
 		var y:Float;
 	}>;
+	var required_packs:Array<String>;
 }

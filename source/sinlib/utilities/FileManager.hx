@@ -321,7 +321,7 @@ class FileManager
 				if (!readDirectory(prevDir).contains(dir))
 				{
 					FileSystem.createDirectory(dir);
-					trace('creating $prevDir/$dir');
+					trace('creating $prevDir$dir');
 				}
 
 				prevDir += dir + '/';

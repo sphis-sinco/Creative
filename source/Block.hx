@@ -15,6 +15,7 @@ class Block extends FlxSprite
 		trace('New $Block block: $Block at x: $X, y: $Y');
 		#end
 	}
+
 	public function changeBlock(new_block_tag:String, custom_path:Bool = false, custom_path_string:String = '')
 	{
 		var cp = custom_path;
@@ -30,6 +31,10 @@ class Block extends FlxSprite
 				{
 					block_prefix = NewBlocks.NEW_BLOCK_PREFIXES[i];
 					cps = NewBlocks.NEW_BLOCK_MOD_NAMES[i];
+					if (!PlayState.REQUIRED_PACKS.contains(cps))
+					{
+						PlayState.REQUIRED_PACKS.push(cps);
+					}
 				}
 				i++;
 			}
