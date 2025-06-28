@@ -93,7 +93,7 @@ class FileManager
 			}
 			else
 			{
-				trace('Could not get asset: $asset', posinfo);
+				trace('Could not get asset: $asset'); // , posinfo);
 			}
 			UNFOUND_ASSETS.push(asset);
 		}
@@ -310,7 +310,7 @@ class FileManager
 	 * @param path File path
 	 * @param content File content
 	 */
-	public static function writeToPath(path:String, content:String, ?posinfo:PosInfos):Void
+	public static function writeToPath(path:String, content:String):Void
 	{
 		#if sys
 		if (path.length > 0)
@@ -318,7 +318,7 @@ class FileManager
 			var prevDir:String = '';
 			for (dir in path.split('/'))
 			{
-				if (!exists(prevDir, posinfo) || prevDir == '')
+				if (!exists(prevDir))
 				{
 					FileSystem.createDirectory(prevDir);
 				}
@@ -333,7 +333,7 @@ class FileManager
 				prevDir += dir + '/';
 			}
 
-			if (!exists(path, posinfo))
+			if (!exists(path))
 			{
 				File.write(path, false);
 				trace('generating $path');
@@ -441,14 +441,14 @@ class FileManager
 	 * @param path the path your checking
 	 * @return Bool
 	 */
-	public static function exists(path:String, ?posinfo:PosInfos):Bool
+	public static function exists(path:String):Bool
 	{
 		var val = openfl.utils.Assets.exists(path);
 		if (!val)
 		{
 			#if sys val = FileSystem.exists(path); #end
 			if (!val)
-				unfoundAsset(path, posinfo);
+				unfoundAsset(path);
 		}
 		return val;
 	}
