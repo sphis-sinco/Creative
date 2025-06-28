@@ -54,6 +54,7 @@ class PlayState extends FlxState
 		'inferno_dirt',
 		'tree_log_front',
 		'tree_log_side',
+		'tree_log_side_vertical',
 		'plank',
 		'lava',
 		'gold',
