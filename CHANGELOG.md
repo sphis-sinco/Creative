@@ -1,4 +1,7 @@
 # 2025-06-27
+## 0.3.3_02
+- Code optimizations were made
+
 ## 0.3.3_01
 - The sky changes when you are in the inferno world present
 

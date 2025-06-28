@@ -6,12 +6,17 @@ import flixel.math.FlxRandom;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 
-class MenuState extends FlxState
+class MenuState extends State
 {
 	public static var btnWidth:Int = 200;
 
 	public var present:String = 'blank';
 	public var presents:Array<String> = ['blank', 'inferno'];
+
+	override public function new()
+	{
+		super(true);
+	}
 
 	override function create()
 	{
@@ -19,9 +24,6 @@ class MenuState extends FlxState
 
 		PlayState.present = '';
 
-		var VersionText:FlxText = new FlxText(10, 10, 0, 'Creative ' + Version.generateVersionString(true, true, true), 16);
-		add(VersionText);
-		VersionText.scrollFactor.set(0, 0);
 		VersionText.text += '\nMade by sphis_sinco';
 
 		var logo:FlxSprite = new FlxSprite(0, 0).loadGraphic(FileManager.getImageFile('logo/logo'));

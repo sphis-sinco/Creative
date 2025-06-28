@@ -5,7 +5,7 @@ import flixel.math.FlxMath;
 import flixel.math.FlxRandom;
 import flixel.text.FlxText;
 
-class PlayState extends FlxState
+class PlayState extends State
 {
 	static var initedWorldBlocks = false;
 
@@ -163,7 +163,7 @@ class PlayState extends FlxState
 			worldBlocks.add(block);
 	}
 
-	public static var VersionText:FlxText;
+	public static var verText:FlxText;
 
 	override public function create():Void
 	{
@@ -209,12 +209,12 @@ class PlayState extends FlxState
 		}
 		#end
 
-		VersionText = new FlxText(10, 10, 0, 'Creative '
+		verText = new FlxText(10, 10, 0, 'Creative '
 			+ #if sys '(sys, press A to leave)' #else '(not sys, press ESCAPE to leave)' #end
 			+ ' ${SLGame.isDebug ? '(Debug)' : ''} '
 			+ Version.generateVersionString(true, true, true), 16);
-		add(VersionText);
-		VersionText.scrollFactor.set(0, 0);
+		add(verText);
+		verText.scrollFactor.set(0, 0);
 
 
 
@@ -230,7 +230,7 @@ class PlayState extends FlxState
 			worldInit();
 			initedWorldBlocks = true;
 		}
-		CurrentBlock = new Block('stone', VersionText.x + VersionText.width + 10, 10);
+		CurrentBlock = new Block('stone', verText.x + verText.width + 10, 10);
 		CurrentBlock.scale.set(blockScale, blockScale);
 		add(CurrentBlock);
 

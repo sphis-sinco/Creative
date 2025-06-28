@@ -38,7 +38,7 @@ class PlaystateDebugSubState extends FlxSubState
 		black.alpha = 0.5;
 		add(black);
 
-		WorldWidthText.setPosition(10, 10 + PlayState.VersionText.y + PlayState.VersionText.height);
+		WorldWidthText.setPosition(10, 10 + PlayState.verText.y + PlayState.verText.height);
 		WorldHeightText.setPosition(10, 10 + WorldWidthText.y + WorldWidthText.height);
 
 		WorldWidthText.text = 'World width: ' + Std.string(PlayState.worldWidth);
