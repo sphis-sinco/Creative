@@ -1,10 +1,11 @@
-# 2025-06-27
+# 2025-06-28
 ## 0.3.3_02
 - Code optimizations were made
 
 ## 0.3.3_01
 - The sky changes when you are in the inferno world present
 
+# 2025-06-27
 ## 0.3.3
 - The `setworld` command can send you to inferno now properly
 - Moved debug stuff like command input, world width and height to a playstate substate enablable / disableable by pressing 7
