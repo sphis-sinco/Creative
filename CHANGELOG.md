@@ -1,4 +1,7 @@
 # 2025-06-27
+## 0.3.2_01
+- Fixed crashes related to world presents
+
 ## 0.3.2
 - Added command inputs
         - resetState - resets PlayState
