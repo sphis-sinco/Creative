@@ -1,4 +1,9 @@
 # 2025-06-28
+## 0.4.0_01
+- Fixed Settings json not having the Backups option initally
+- Fixed Backups option button position
+- Fixed portal block not being animated
+
 ## 0.4.0
 - When a save path isnt found, `save.json` isn't loaded
 - Added more blocks

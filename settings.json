@@ -1,3 +1,4 @@
 {
-        "auto_gen_block_list": true
+        "auto_gen_block_list": true,
+        "backup_files": true
 }

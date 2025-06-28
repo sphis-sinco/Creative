@@ -30,7 +30,7 @@ class SettingsMenu extends FlxState
 			MenuState.btnWidth);
 		add(autoGenerateBlockList);
                 autoGenerateBlockList.scale.set(2, 2);
-		backupFiles = new FlxButtonPlus(80, 20, () ->
+		backupFiles = new FlxButtonPlus(80, 60, () ->
 		{
 			Settings.backup_files = !Settings.backup_files;
 			backupFiles.text = 'Backup files (${Settings.backup_files})';
