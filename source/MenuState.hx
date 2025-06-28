@@ -32,6 +32,14 @@ class MenuState extends State
 		logo.screenCenter(X);
 		logo.y -= (logo.height / 3);
 
+		var splashes:Array<String> = FileManager.readFile(FileManager.getDataFile('splash.txt')).split('\n');
+		var splashText:FlxText = new FlxText(0, 0, 0, splashes[new FlxRandom().int(0, splashes.length - 1)], 16);
+		splashText.color = FlxColor.YELLOW;
+		add(splashText);
+		splashText.screenCenter();
+		splashText.y -= splashText.height * 5;
+		trace(splashText.text);
+
 		var playRegular:FlxButtonPlus = new FlxButtonPlus(0, 0, () ->
 		{
 			FlxG.switchState(() -> new PlayState());
@@ -72,14 +80,14 @@ class MenuState extends State
 		Settings.screenCenter();
 		Settings.scale.set(2, 2);
 		Settings.y = playPresents.y + playPresents.height + 32;
-		// Splash stuffs
-		var splashes:Array<String> = FileManager.readFile(FileManager.getDataFile('splash.txt')).split('\n');
-		var splashText:FlxText = new FlxText(0, 0, 0, splashes[new FlxRandom().int(0, splashes.length - 1)], 16);
-		splashText.color = FlxColor.YELLOW;
-		add(splashText);
-		splashText.screenCenter();
-		splashText.y -= splashText.height * 5;
-		trace(splashText.text);
+		var Mod:FlxButtonPlus = new FlxButtonPlus(0, 0, () ->
+		{
+			FlxG.switchState(() -> new ModMenu());
+		}, 'Mod', btnWidth);
+		add(Mod);
+		Mod.screenCenter();
+		Mod.scale.set(2, 2);
+		Mod.y = Settings.y + Settings.height + 32;
 
 	}
 }
