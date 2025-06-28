@@ -217,10 +217,13 @@ class PlayState extends FlxState
 		if (Json.stringify(data) == '' || data.world == null)
 			return;
 
-		for (block in worldBlocks)
+		if (worldBlocks != null)
 		{
-			block.destroy();
-			worldBlocks.remove(block);
+			for (block in worldBlocks)
+			{
+				block.destroy();
+				worldBlocks.remove(block);
+			}
 		}
 
 		for (blockData in data.world)
