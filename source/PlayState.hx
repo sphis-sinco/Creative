@@ -471,7 +471,11 @@ class PlayState extends State
 			if (FileManager.exists(path + '.json') && !non_valid_save_names.contains(saveName.text.toLowerCase()))
 				loadWorld(path);
 			else
+			{
+				saveMsg.text = 'Path "$path" doesn\'t exist ';
+
 				loadWorld();
+			}
 		}
 		if (FlxG.keys.justReleased.A && !inputText_hasFocus)
 		{
