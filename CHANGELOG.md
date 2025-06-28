@@ -1,5 +1,6 @@
 # 2025-06-27
 ## 0.3.0
+- .community folder for community stuff
 - PlayState auto-block-list generation doesn't include any files that aren't a png
 - Added animated block support via a simple json file (example with the [new lava animated block](./assets/images/blocks/blocks-lava.json))
 - Added several new blocks
