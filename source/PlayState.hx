@@ -8,6 +8,8 @@ import flixel.text.FlxText;
 
 class PlayState extends FlxState
 {
+	public static var TYPING:Bool = false;
+
 	public static var present:String = '';
 
 	var randomWorld:Bool = true;
@@ -301,6 +303,7 @@ class PlayState extends FlxState
 
 	override public function update(elapsed:Float):Void
 	{
+		TYPING = commandInput.hasFocus;
 		super.update(elapsed);
 		CurrentBlockText.text = CurrentBlock.block_tag;
 		commandInput.setPosition(CurrentBlockText.x + CurrentBlockText.width + 10, CurrentBlockText.y);
@@ -466,7 +469,7 @@ class PlayState extends FlxState
 				worldInit();
 
 			default:
-				commandInput.text = 'Unknown command: "${commandInput.text}"';
+				commandInput.text = 'Unknown command: "${args[0]}"';
 		}
 	}
 }
