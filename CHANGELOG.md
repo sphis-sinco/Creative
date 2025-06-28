@@ -1,4 +1,9 @@
 # 2025-06-27
+## 0.3.3
+- Moved debug stuff like command input, world width and height to a playstate substate enablable / disableable by pressing 7
+- Added sky
+- Added rainbow block (idea by Paul leps)
+
 ## 0.3.2_01
 - The `setworld` command can send you to inferno now
 - Fixed crash when opening a normal world and then opening a world with the "Blank" world present

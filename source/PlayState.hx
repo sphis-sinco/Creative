@@ -1,11 +1,9 @@
 package;
 
-import flixel.addons.ui.FlxUIInputText;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
 import flixel.math.FlxRandom;
 import flixel.text.FlxText;
-import flixel.util.FlxColor;
 
 class PlayState extends FlxState
 {
@@ -29,6 +27,10 @@ class PlayState extends FlxState
 			loadWorld(file);
 		}
 		#end
+		if (!PlaystateDebugSubState.inited)
+		{
+			PlaystateDebugSubState.init();
+		}
 	}
 
 	public static var blockScale:Int = 2;
@@ -38,7 +40,7 @@ class PlayState extends FlxState
 
 	public static var zoom:Float = 1.0;
 
-	public var worldLayers = {
+	public static var worldLayers = {
 		'grass': 11,
 		'dirt': 10,
 		'dirt_offset_min': 0,
@@ -52,7 +54,7 @@ class PlayState extends FlxState
 		'inferno_lava': 2,
 	};
 
-	public var blocks:Array<String> = [
+	public static var blocks:Array<String> = [
 		'stone',
 		'grass',
 		'dirt',
@@ -73,6 +75,7 @@ class PlayState extends FlxState
 		'iron_ore',
 		'diamond_ore',
 		'emerald_ore',
+		'rainbow',
 	];
 	public var wools:Array<String> = [
 		'red', 'orange', 'yellow', 'green', 'lime', 'cyan', 'blue', 'purple', 'pink', 'brown', 'gray', 'white', 'black'
@@ -80,7 +83,7 @@ class PlayState extends FlxState
 
 	public static var worldBlocks:FlxTypedGroup<Block>;
 
-	public function worldRender()
+	public static function worldRender()
 	{
 		#if WORLD_RENDERING_TRACES
 		trace('worldRender');
@@ -92,7 +95,7 @@ class PlayState extends FlxState
 		}
 	}
 
-	public function worldInit()
+	public static function worldInit()
 	{
 		#if WORLD_RENDERING_TRACES
 		trace('worldInit');
@@ -124,7 +127,7 @@ class PlayState extends FlxState
 		worldRender();
 	}
 
-	public function blockSpawn(x:Float, y:Float)
+	public static function blockSpawn(x:Float, y:Float)
 	{
 		#if WORLD_RENDERING_TRACES
 		trace('$x|$y');
@@ -160,9 +163,16 @@ class PlayState extends FlxState
 			worldBlocks.add(block);
 	}
 
+	public static var VersionText:FlxText;
+
 	override public function create():Void
 	{
 		super.create();
+
+		var sky:FlxSprite = new FlxSprite();
+		sky.loadGraphic(FileManager.getImageFile('sky'));
+		sky.scale.set(1280, 720);
+		add(sky);
 
 		for (wool in wools)
 		{
@@ -192,23 +202,14 @@ class PlayState extends FlxState
 		}
 		#end
 
-		var VersionText:FlxText = new FlxText(10, 10, 0, 'Creative '
+		VersionText = new FlxText(10, 10, 0, 'Creative '
 			+ #if sys '(sys, press A to leave)' #else '(not sys, press ESCAPE to leave)' #end
 			+ ' ${SLGame.isDebug ? '(Debug)' : ''} '
 			+ Version.generateVersionString(true, true, true), 16);
 		add(VersionText);
 		VersionText.scrollFactor.set(0, 0);
 
-		#if debug
-		WorldWidthText = new FlxText(10, 10 + VersionText.y + VersionText.height, 0, 'World width: ' + Std.string(worldWidth), 16);
-		WorldHeightText = new FlxText(10, 10 + WorldWidthText.y + WorldWidthText.height, 0, 'World height: ' + Std.string(worldHeight), 16);
 
-		WorldWidthText.scrollFactor.set(0, 0);
-		WorldHeightText.scrollFactor.set(0, 0);
-
-		add(WorldWidthText);
-		add(WorldHeightText);
-		#end
 
 		FlxG.camera.zoom = zoom;
 
@@ -229,18 +230,8 @@ class PlayState extends FlxState
 		CurrentBlockText = new FlxText(CurrentBlock.x + CurrentBlock.width + 10, CurrentBlock.y, 0, 'stone', 16);
 		add(CurrentBlockText);
 
-		commandInput = new FlxUIInputText(0, 0, 666, 16);
-		add(commandInput);
-
-		commandOutput = new FlxText(0, 0, 666, '', 16);
-		add(commandOutput);
-		commandOutput.color = FlxColor.WHITE;
-
 		add(MouseBlock);
 	}
-
-	var commandInput:FlxUIInputText;
-	var commandOutput:FlxText;
 
 	#if sys
 	function saveWorld()
@@ -297,44 +288,38 @@ class PlayState extends FlxState
 	}
 	#end
 
-	var WorldWidthText:FlxText;
-	var WorldHeightText:FlxText;
-
 	var MouseBlock:FlxSprite;
 
-	var CurrentBlock:Block;
-	var CurrentBlockText:FlxText;
+	public static var CurrentBlock:Block;
+	public static var CurrentBlockText:FlxText;
 
 	var new_tag:String;
 	var new_tag_id:Int = 0;
 
 	override public function update(elapsed:Float):Void
 	{
-		TYPING = commandInput.hasFocus;
 		super.update(elapsed);
 		CurrentBlockText.text = CurrentBlock.block_tag;
-		commandInput.setPosition(CurrentBlockText.x + CurrentBlockText.width + 10, CurrentBlockText.y);
-		commandOutput.setPosition(commandInput.x, commandInput.y + commandInput.height + 10);
 
 		if (new_tag != CurrentBlock.block_tag)
 			new_tag = CurrentBlock.block_tag;
 
 		#if debug
-		if (FlxG.keys.justReleased.Q && zoom > 0.5 && !commandInput.hasFocus)
+		if (FlxG.keys.justReleased.Q && zoom > 0.5 && !PlaystateDebugSubState.commandInput.hasFocus)
 			zoom -= 0.5;
-		else if (FlxG.keys.justReleased.E && zoom < 2 && !commandInput.hasFocus)
+		else if (FlxG.keys.justReleased.E && zoom < 2 && !PlaystateDebugSubState.commandInput.hasFocus)
 			zoom += 0.5;
 
-		if (FlxG.keys.justReleased.Z && worldWidth > 1 && !commandInput.hasFocus)
+		if (FlxG.keys.justReleased.Z && worldWidth > 1 && !PlaystateDebugSubState.commandInput.hasFocus)
 			worldWidth -= 1;
-		else if (FlxG.keys.justReleased.X && worldWidth < 50 && !commandInput.hasFocus)
+		else if (FlxG.keys.justReleased.X && worldWidth < 50 && !PlaystateDebugSubState.commandInput.hasFocus)
 			worldWidth += 1;
 
-		if (FlxG.keys.anyJustReleased([Q, E, Z, X]) && !commandInput.hasFocus)
+		if (FlxG.keys.anyJustReleased([Q, E, Z, X]) && !PlaystateDebugSubState.commandInput.hasFocus)
 			FlxG.resetState();
 		#end
 
-		if (FlxG.mouse.justReleasedRight && !commandInput.hasFocus)
+		if (FlxG.mouse.justReleasedRight && !PlaystateDebugSubState.commandInput.hasFocus)
 		{
 			for (block in worldBlocks)
 			{
@@ -346,12 +331,12 @@ class PlayState extends FlxState
 				}
 			}
 		}
-		else if (FlxG.mouse.justReleased && !commandInput.hasFocus)
+		else if (FlxG.mouse.justReleased && !PlaystateDebugSubState.commandInput.hasFocus)
 		{
 			placeBlock();
 		}
 
-		if (FlxG.keys.anyJustReleased([LEFT, RIGHT]) && !commandInput.hasFocus)
+		if (FlxG.keys.anyJustReleased([LEFT, RIGHT]) && !PlaystateDebugSubState.commandInput.hasFocus)
 		{
 			var i:Int = 0;
 			for (block in blocks)
@@ -382,23 +367,22 @@ class PlayState extends FlxState
 			CurrentBlock.changeBlock(new_tag);
 		}
 		#if sys
-		if (FlxG.keys.justReleased.ESCAPE && !commandInput.hasFocus)
+		if (FlxG.keys.justReleased.ESCAPE && !PlaystateDebugSubState.commandInput.hasFocus)
 			saveWorld();
-		if (FlxG.keys.justReleased.ENTER && !commandInput.hasFocus)
+		if (FlxG.keys.justReleased.ENTER && !PlaystateDebugSubState.commandInput.hasFocus)
 			loadWorld();
-		if (FlxG.keys.justReleased.A && !commandInput.hasFocus)
+		if (FlxG.keys.justReleased.A && !PlaystateDebugSubState.commandInput.hasFocus)
 			FlxG.switchState(() -> new MenuState());
 		#else
-		if (FlxG.keys.justReleased.ESCAPE && !commandInput.hasFocus)
+		if (FlxG.keys.justReleased.ESCAPE && !PlaystateDebugSubState.commandInput.hasFocus)
 			FlxG.switchState(() -> new MenuState());
 		#end
-		if (FlxG.keys.justReleased.ENTER && commandInput.hasFocus)
+		if (FlxG.keys.justReleased.SEVEN)
 		{
-			commandInputed();
-		}
-		if (commandInput.hasFocus)
-		{
-			commandOutput.text = 'resetState, resetGame, setworld PATH, clearworld, regenworld, setSelection BLOCK_TAG';
+			if (!PlaystateDebugSubState.inited)
+				PlaystateDebugSubState.init();
+
+			openSubState(new PlaystateDebugSubState());
 		}
 	}
 
@@ -451,13 +435,13 @@ class PlayState extends FlxState
 		}
 	}
 
-	public function commandInputed()
+	public static function commandInputed()
 	{
-		var args = commandInput.text.toLowerCase().split(' ');
-		commandInput.text = '';
-		commandInput.hasFocus = false;
+		var args = PlaystateDebugSubState.commandInput.text.toLowerCase().split(' ');
+		PlaystateDebugSubState.commandInput.text = '';
+		PlaystateDebugSubState.commandInput.hasFocus = false;
 
-		commandOutput.text = '';
+		PlaystateDebugSubState.commandOutput.text = '';
 
 		switch (args[0])
 		{
@@ -480,10 +464,10 @@ class PlayState extends FlxState
 							FlxG.switchState(() -> new PlayState(args[1]));
 					}
 					else
-						commandOutput.text = 'Path doesn\'t exist';
+						PlaystateDebugSubState.commandOutput.text = 'Path doesn\'t exist';
 				}
 				else
-					commandOutput.text = 'Path required';
+					PlaystateDebugSubState.commandOutput.text = 'Path required';
 			case 'clearworld':
 				for (block in worldBlocks)
 					block.destroy();
@@ -498,12 +482,13 @@ class PlayState extends FlxState
 					if (blocks.contains(args[1].toLowerCase()))
 						CurrentBlock.changeBlock(args[1].toLowerCase());
 					else
-						commandOutput.text = 'Block doesn\'t exist';
+						PlaystateDebugSubState.commandOutput.text = 'Block doesn\'t exist';
 				else
-					commandOutput.text = 'Block required';
+					PlaystateDebugSubState.commandOutput.text = 'Block required';
 
 			default:
-				commandOutput.text = 'Unknown command: "${args[0]}"';
+				PlaystateDebugSubState.commandOutput.text = 'Unknown command: "${args[0]}"';
 		}
+		CurrentBlockText.text = CurrentBlock.block_tag;
 	}
 }
