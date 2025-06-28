@@ -81,6 +81,7 @@ class PlayState extends State
 		'emerald_ore',
 		'rainbow',
 		'portal',
+		'sand',
 	];
 
 	private static var blocks:Array<String> = [];
@@ -318,44 +319,54 @@ class PlayState extends State
 			return;
 		}
 
-		var packs = data.required_packs.length;
-		var curPacks = 0;
-
-		var missingPacks = [];
-		for (pack in data.required_packs)
+		var packs = 0;
+		if (data.required_packs != null)
+			packs = data.required_packs.length;
+		if (packs > 1)
 		{
-			missingPacks.push(pack);
-		}
+			var curPacks = 0;
 
-		var checkERPL:Dynamic = function(pack:String)
-		{
-			for (packLoc in PackLoader.ENABLED_RESOURCE_PACK_LOCATIONS)
+			var missingPacks = [];
+			for (pack in data.required_packs)
 			{
-				if (packLoc.split('/')[1] == pack)
-				{
-					curPacks++;
-					trace('Has $pack');
-					missingPacks.remove(pack);
-				}
+				missingPacks.push(pack);
 			}
-		};
 
-		for (pack in data.required_packs)
-		{
-			trace('Checking for $pack');
-			checkERPL(pack);
-		}
+			var checkERPL:Dynamic = function(pack:String)
+			{
+				for (packLoc in PackLoader.ENABLED_RESOURCE_PACK_LOCATIONS)
+				{
+					if (packLoc.split('/')[1] == pack)
+					{
+						curPacks++;
+						trace('Has $pack');
+						missingPacks.remove(pack);
+					}
+				}
+			};
 
-		if (packs > curPacks)
-		{
-			saveMsg.text = 'Missing packs $missingPacks';
-			return;
+			for (pack in data.required_packs)
+			{
+				trace('Checking for $pack');
+				checkERPL(pack);
+			}
+
+			if (packs > curPacks)
+			{
+				saveMsg.text = 'Missing packs $missingPacks';
+				return;
+			}
 		}
 
 		if (!initedWorldBlocks)
-			for (block in worldBlocks)
-				block.destroy();
-		worldBlocks.clear();
+		{
+			if (worldBlocks != null)
+			{
+				for (block in worldBlocks)
+					block.destroy();
+				worldBlocks.clear();
+			}
+		}
 
 		for (blockData in data.world)
 		{
@@ -503,6 +514,7 @@ class PlayState extends State
 			saveName.visible = !saveName.visible;
 			saveFolder.visible = !saveFolder.visible;
 		}
+		blockGravities();
 	}
 
 	public function placeBlock()
@@ -609,5 +621,26 @@ class PlayState extends State
 				PlaystateDebugSubState.commandOutput.text = 'Unknown command: "${args[0]}"';
 		}
 		CurrentBlockText.text = CurrentBlock.block_tag;
+	}
+	public function blockGravities()
+	{
+		return;
+
+		for (block in worldBlocks)
+		{
+			if (!block.gravity)
+				return;
+
+			block.y += block.height;
+
+			for (block2 in worldBlocks)
+			{
+				if (block2 == block)
+					return;
+
+				if (block.overlaps(block2))
+					block.y -= block.height;
+			}
+		}
 	}
 }

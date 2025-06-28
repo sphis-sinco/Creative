@@ -56,7 +56,8 @@ class Block extends FlxSprite
 		if (FileManager.exists(img.replace('png', 'json')))
 		{
 			json = FileManager.getJSON(img.replace('png', 'json'));
-			animated = true;
+			animated = json.frames != null && json.fps != null;
+			gravity = json.gravity;
 		}
 
 		loadGraphic(img, animated, 16, 16);
@@ -74,10 +75,12 @@ class Block extends FlxSprite
 			animation.play('animation');
 		}
 	}
+	public var gravity:Bool = false;
 }
 
 typedef BlockJson =
 {
-	var frames:Int;
-	var fps:Float;
+	var ?frames:Int;
+	var ?fps:Float;
+	var ?gravity:Bool;
 }

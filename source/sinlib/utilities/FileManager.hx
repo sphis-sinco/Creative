@@ -318,11 +318,17 @@ class FileManager
 			var prevDir:String = '';
 			for (dir in path.split('/'))
 			{
-				if (!readDirectory(prevDir).contains(dir))
+				if (!exists(prevDir))
+				{
+					FileSystem.createDirectory(prevDir);
+				}
+
+				if (!readDirectory(prevDir).contains(dir) || prevDir == '')
 				{
 					FileSystem.createDirectory(dir);
 					trace('creating $prevDir$dir');
 				}
+
 
 				prevDir += dir + '/';
 			}
