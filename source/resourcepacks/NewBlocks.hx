@@ -12,7 +12,7 @@ class NewBlocks
 		NEW_BLOCK_PREFIXES = [];
 		NEW_BLOCK_MOD_NAMES = [];
 
-		for (pack in PackLoader.RESOURCE_PACK_LOCATIONS)
+		for (pack in PackLoader.ENABLED_RESOURCE_PACK_LOCATIONS)
 		{
 			var blocks:Array<String> = FileManager.readDirectory(pack + '/blocks');
 

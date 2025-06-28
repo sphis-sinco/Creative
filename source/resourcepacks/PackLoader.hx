@@ -10,17 +10,19 @@ class PackLoader
 	public static var RESOURCE_PACKS:Array<Pack> = [];
 	public static var RESOURCE_PACK_LOCATIONS:Array<String> = [];
 
+	public static var ENABLED_RESOURCE_PACKS:Array<Pack> = [];
+	public static var ENABLED_RESOURCE_PACK_LOCATIONS:Array<String> = [];
+
 	public static function loadResourcePacks()
 	{
 		RESOURCE_PACKS = [];
 		RESOURCE_PACK_LOCATIONS = [];
-		var packlist:String = '';
 
 		#if sys
 		var resourcePackFolder = FileManager.readDirectory('$RPF');
 		for (item in resourcePackFolder)
 		{
-			if (item.contains('.'))
+			if (!FileSystem.isDirectory('$RPF/' + item))
 			{
 				resourcePackFolder.remove(item);
 			}
@@ -46,22 +48,33 @@ class PackLoader
 					if (pack.pack_format != PackClass.PACK_FORMAT)
 						trace('$folder has an outdated pack_format: ${pack.pack_format}');
 
-					if (!RESOURCE_PACK_LOCATIONS.contains('$RPF/$folder') && !RESOURCE_PACKS.contains(pack) && !packlist.contains(folder))
-					{
-						RESOURCE_PACKS.push(pack);
-						RESOURCE_PACK_LOCATIONS.push(location.replace('/$item', ''));
-						packlist += '$folder\n';
-					}
+					RESOURCE_PACKS.push(pack);
+					RESOURCE_PACK_LOCATIONS.push(location.replace('/$item', ''));
 				}
 			}
 		}
 		NewBlocks.getNewBlocks();
-		trace(packlist);
-		FileManager.writeToPath('resourcepacks/packlist.txt', packlist);
+		packlist();
 		#else
 		trace('Not SYS');
 		#end
 	}
 
-	public static function disableMod() {}
+	public static function packlist()
+	{
+		var packlist:String = '';
+		var i = 0;
+		for (mod in ENABLED_RESOURCE_PACK_LOCATIONS)
+		{
+			var folder = mod.split('/')[1];
+
+			if (!RESOURCE_PACK_LOCATIONS.contains('$RPF/$folder') && !packlist.contains(folder))
+			{
+				packlist += '$folder\n';
+			}
+			i++;
+		}
+		trace(packlist);
+		FileManager.writeToPath('resourcepacks/packlist.txt', packlist);
+	}
 }

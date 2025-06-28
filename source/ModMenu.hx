@@ -36,7 +36,41 @@ class ModMenu extends FlxState
 			selections(1);
 
 		if (FlxG.keys.justPressed.SPACE)
+		{
 			grpMods.members[curSelected].modEnabled = !grpMods.members[curSelected].modEnabled;
+
+                        if (!grpMods.members[curSelected].modEnabled)
+                        {
+                                var i = 0;
+                                for (mod in PackLoader.RESOURCE_PACK_LOCATIONS)
+                                {
+                                        trace(mod.split('/')[1]);
+                                        if (mod.split('/')[1] == grpMods.members[curSelected].text)
+                                        {
+                                                PackLoader.ENABLED_RESOURCE_PACK_LOCATIONS.remove(mod);
+                                                PackLoader.ENABLED_RESOURCE_PACKS.remove(PackLoader.ENABLED_RESOURCE_PACKS[i]);
+                                        }
+
+                                        i++;
+                                }
+                        } else {
+                                
+                                var i = 0;
+                                for (mod in PackLoader.RESOURCE_PACK_LOCATIONS)
+                                {
+                                        trace(mod.split('/')[1]);
+                                        if (mod.split('/')[1] == grpMods.members[curSelected].text)
+                                        {
+                                                PackLoader.ENABLED_RESOURCE_PACK_LOCATIONS.push(mod);
+                                                PackLoader.ENABLED_RESOURCE_PACKS.push(PackLoader.ENABLED_RESOURCE_PACKS[i]);
+                                        }
+
+                                        i++;
+                                }
+                        }
+
+                        PackLoader.packlist();
+		}
 
 		if (FlxG.keys.justPressed.I && curSelected != 0)
 		{
@@ -87,7 +121,6 @@ class ModMenu extends FlxState
 		}
 
 		#if desktop
-		var modList = [];
 		modFolders = [];
 
 		for (file in FileSystem.readDirectory('${PackLoader.RPF}'))
@@ -98,15 +131,17 @@ class ModMenu extends FlxState
 
 		enabledMods = [];
 
-		modList = FileSystem.readDirectory('${PackLoader.RPF}');
-
-		trace(modList);
+                for (mod in FileManager.readFile('${PackLoader.RPF}/packlist.txt').split('\n'))
+                {
+                        enabledMods.push(mod);
+                }
 
 		var loopNum:Int = 0;
 		for (i in modFolders)
 		{
 			var txt:ModMenuItem = new ModMenuItem(0, 10 + (40 * loopNum), 0, i, 32);
 			txt.text = i;
+                        txt.modEnabled = enabledMods[loopNum] == txt.text;
 			grpMods.add(txt);
 
 			loopNum++;
