@@ -1,5 +1,6 @@
 # 2025-06-27
 ## 0.3.0
+- Removed new_tag_id trace
 - Added Autogenerate block list option
 - Added SettingsMenu
 - In PlayState the array of blocks generated from the blocks image folder trace now required the BLOCK_TRACES conditional

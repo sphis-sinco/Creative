@@ -312,7 +312,7 @@ class PlayState extends FlxState
 				new_tag_id = blocks.length - 1;
 			else if (new_tag_id > blocks.length - 1)
 				new_tag_id = 0;
-			trace(new_tag_id);
+			// trace(new_tag_id);
 
 			new_tag = blocks[new_tag_id];
 			CurrentBlock.changeBlock(new_tag);
