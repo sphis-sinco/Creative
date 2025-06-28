@@ -1,5 +1,6 @@
 # 2025-06-28
 ## 0.4.0_01
+- Fixed Backups option button being visible on non-sys platforms
 - Fixed Settings json not having the Backups option initally
 - Fixed Backups option button position
 - Fixed portal block not being animated

@@ -35,7 +35,7 @@ class SettingsMenu extends FlxState
 			Settings.backup_files = !Settings.backup_files;
 			backupFiles.text = 'Backup files (${Settings.backup_files})';
 		}, 'Backup files (${Settings.backup_files})', MenuState.btnWidth);
-		add(backupFiles);
+		#if sys add(backupFiles); #end
 		backupFiles.scale.set(2, 2);
         }
 
