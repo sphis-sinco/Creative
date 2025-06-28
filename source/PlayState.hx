@@ -395,6 +395,10 @@ class PlayState extends FlxState
 		{
 			commandInputed();
 		}
+		if (commandInput.hasFocus)
+		{
+			commandOutput.text = 'resetState, resetGame, setworld PATH, clearworld, regenworld, setSelection BLOCK_TAG';
+		}
 	}
 
 	public function placeBlock()
