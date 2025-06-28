@@ -138,7 +138,6 @@ class ModMenu extends FlxState
 				grpMods.members[txt].color = FlxColor.WHITE;
 		}
 
-
 		organizeByY();
 	}
 
