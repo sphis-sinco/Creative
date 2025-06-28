@@ -1,5 +1,6 @@
 # 2025-06-28
 ## 0.4.0
+- Added resourcepacks (mod support)
 - Buttons related to the save location are hidden when the compiled build doesn't support sys
 
 ## 0.3.4

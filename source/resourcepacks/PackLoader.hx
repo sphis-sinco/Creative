@@ -46,6 +46,7 @@ class PackLoader
 				}
 			}
 		}
+		NewBlocks.getNewBlocks();
                 #else
                 trace('Not SYS');
                 #end

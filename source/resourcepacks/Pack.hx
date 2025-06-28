@@ -1,7 +1,7 @@
 package resourcepacks;
 
 class PackClass {
-	public static var PACK_FORMAT:Int = 2;
+	public static var PACK_FORMAT:Int = 3;
 }
 
 typedef Pack = {

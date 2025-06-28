@@ -55,7 +55,7 @@ class PlayState extends State
 		'inferno_lava': 2,
 	};
 
-	public static var blocks:Array<String> = [
+	public static var blocks_og:Array<String> = [
 		'stone',
 		'grass',
 		'dirt',
@@ -78,6 +78,8 @@ class PlayState extends State
 		'emerald_ore',
 		'rainbow',
 	];
+
+	private static var blocks:Array<String> = [];
 
 	public var wools:Array<String> = [
 		'red', 'orange', 'yellow', 'green', 'lime', 'cyan', 'blue', 'purple', 'pink', 'brown', 'gray', 'white', 'black'
@@ -186,10 +188,21 @@ class PlayState extends State
 		sky.scale.set(1280, 720);
 		add(sky);
 
+		blocks = blocks_og;
+
 		for (wool in wools)
 		{
 			blocks.push('${wool}_wool');
 		}
+
+		trace(blocks);
+
+		for (block in NewBlocks.NEW_BLOCKS)
+		{
+			blocks.push(block);
+		}
+
+		trace(blocks);
 
 		#if sys
 		if (SettingsMenu.Settings.auto_gen_block_list)
