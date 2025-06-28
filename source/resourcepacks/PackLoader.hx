@@ -7,24 +7,25 @@ class PackLoader
 	 */
 	public static var RPF:String = 'resourcepacks';
 
-        public static var RESOURCE_PACKS:Array<Pack> = [];
-        public static var RESOURCE_PACK_LOCATIONS:Array<String> = [];
+	public static var RESOURCE_PACKS:Array<Pack> = [];
+	public static var RESOURCE_PACK_LOCATIONS:Array<String> = [];
 
-        public static function loadResourcePacks() {
-                RESOURCE_PACKS = [];
-                RESOURCE_PACK_LOCATIONS = [];
+	public static function loadResourcePacks()
+	{
+		RESOURCE_PACKS = [];
+		RESOURCE_PACK_LOCATIONS = [];
 		var packlist:String = '';
 
-                #if sys
+		#if sys
 		var resourcePackFolder = FileManager.readDirectory('$RPF');
-                for (item in resourcePackFolder)
-                {
-                        if (item.contains('.'))
-                        {
-                                resourcePackFolder.remove(item);
-                        }
-                }
-                trace(resourcePackFolder);
+		for (item in resourcePackFolder)
+		{
+			if (item.contains('.'))
+			{
+				resourcePackFolder.remove(item);
+			}
+		}
+		trace(resourcePackFolder);
 		for (folder in resourcePackFolder)
 		{
 			if (folder.contains('.'))
@@ -35,7 +36,6 @@ class PackLoader
 
 			for (item in folderCont)
 			{
-
 				var location = '$RPF/$folder/$item';
 				if (item == 'pack.json')
 				{
@@ -46,18 +46,22 @@ class PackLoader
 					if (pack.pack_format != PackClass.PACK_FORMAT)
 						trace('$folder has an outdated pack_format: ${pack.pack_format}');
 
-					RESOURCE_PACKS.push(pack);
-					RESOURCE_PACK_LOCATIONS.push(location.replace('/$item', ''));
-					packlist += '$folder\n';
+					if (!RESOURCE_PACK_LOCATIONS.contains('$RPF/$folder'))
+					{
+						RESOURCE_PACKS.push(pack);
+						RESOURCE_PACK_LOCATIONS.push(location.replace('/$item', ''));
+						packlist += '$folder\n';
+					}
 				}
 			}
 		}
 		NewBlocks.getNewBlocks();
 		trace(packlist);
 		FileManager.writeToPath('resourcepacks/packlist.txt', packlist);
-                #else
-                trace('Not SYS');
-                #end
-        }
-        
+		#else
+		trace('Not SYS');
+		#end
+	}
+
+	public static function disableMod() {}
 }
