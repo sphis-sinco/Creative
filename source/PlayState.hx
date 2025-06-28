@@ -168,6 +168,7 @@ class PlayState extends State
 	public static var verText:FlxText;
 
 	public static var saveName:FlxUIInputText;
+	public static var saveFolder:FlxUIInputText;
 
 	override public function create():Void
 	{
@@ -242,6 +243,10 @@ class PlayState extends State
 		add(saveName);
 		saveName.setPosition(verText.x, verText.y + verText.height + 10);
 
+		saveFolder = new FlxUIInputText(0, 0, 666, 'customsaves', 16);
+		add(saveFolder);
+		saveFolder.setPosition(saveName.x, saveName.y + saveName.height + 10);
+
 		add(MouseBlock);
 	}
 
@@ -281,6 +286,7 @@ class PlayState extends State
 
 	public static function loadWorld(file:String = 'save')
 	{
+		trace('loading $file');
 		var data:WorldSave = FileManager.getJSON('$file.json');
 
 		if (Json.stringify(data) == '' || data.world == null)
@@ -316,14 +322,14 @@ class PlayState extends State
 
 	var inputText_hasFocus:Bool = false;
 
-	var non_valid_save_names:Array<String> = ['save', ''];
+	var non_valid_save_names:Array<String> = ['save', '', 'settings'];
 
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
 		CurrentBlockText.text = CurrentBlock.block_tag;
 
-		inputText_hasFocus = saveName.hasFocus || PlaystateDebugSubState.commandInput.hasFocus;
+		inputText_hasFocus = saveName.hasFocus || saveFolder.hasFocus || PlaystateDebugSubState.commandInput.hasFocus;
 
 		if (new_tag != CurrentBlock.block_tag)
 			new_tag = CurrentBlock.block_tag;
@@ -395,13 +401,14 @@ class PlayState extends State
 		{
 			saveWorld('save');
 			if (!non_valid_save_names.contains(saveName.text.toLowerCase()))
-				saveWorld('customsaves/' + saveName.text);
+				saveWorld('${saveFolder.text}/' + saveName.text);
 		}
 		if (FlxG.keys.justReleased.ENTER && !inputText_hasFocus)
 		{
-			if (FileManager.exists('customsaves/' + saveName.text + '.json')
-				&& !non_valid_save_names.contains(saveName.text.toLowerCase()))
-				loadWorld('customsaves/' + saveName.text);
+			var path:String = '${saveFolder.text}/' + saveName.text;
+
+			if (FileManager.exists(path + '.json') && !non_valid_save_names.contains(saveName.text.toLowerCase()))
+				loadWorld(path);
 			else
 				loadWorld();
 		}

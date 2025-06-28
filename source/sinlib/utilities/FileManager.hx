@@ -1,6 +1,7 @@
 package sinlib.utilities;
 
-class FileManager {
+class FileManager
+{
 	public static var SOUND_EXT:String = 'wav';
 
 	/**
@@ -26,7 +27,8 @@ class FileManager {
 	 */
 	public static var FILE_MANAGER_VERSION_SUFFIX:String = '';
 
-	public static function getVersion():String {
+	public static function getVersion():String
+	{
 		return FILE_MANAGER_VERSION + FILE_MANAGER_VERSION_SUFFIX;
 	}
 
@@ -42,7 +44,8 @@ class FileManager {
 	 * @param PATH_TYPE Assets folder
 	 * @return String
 	 */
-	public static function getPath(pathprefix:String, path:String, ?PATH_TYPE:PathTypes = DEFAULT, ?posinfo:PosInfos):String {
+	public static function getPath(pathprefix:String, path:String, ?PATH_TYPE:PathTypes = DEFAULT, ?posinfo:PosInfos):String
+	{
 		var ogreturnpath:String = '${pathprefix}${PATH_TYPE}${path}';
 		var returnpath:String = ogreturnpath;
 
@@ -51,11 +54,16 @@ class FileManager {
 		final suffix:String = (asset_suffix.length > 0) ? '-${LOCALIZED_ASSET_SUFFIX}' : '';
 		var localizedreturnpath:String = '${ogreturnpath.split('.')[0]}${suffix}.${ogreturnpath.split('.')[1]}';
 
-		if (localizedreturnpath != returnpath) {
-			if (exists(localizedreturnpath)) {
+		if (localizedreturnpath != returnpath)
+		{
+			if (exists(localizedreturnpath))
+			{
 				returnpath = localizedreturnpath;
-			} else {
-				if (!UNLOCALIZED_ASSETS.contains(localizedreturnpath)) {
+			}
+			else
+			{
+				if (!UNLOCALIZED_ASSETS.contains(localizedreturnpath))
+				{
 					#if CNGLA_TRACES trace('Could not get localized asset: $localizedreturnpath'); #end
 					UNLOCALIZED_ASSETS.push(localizedreturnpath);
 				}
@@ -63,7 +71,8 @@ class FileManager {
 		}
 		#end
 
-		if (exists(returnpath)) {
+		if (exists(returnpath))
+		{
 			#if EXCESS_TRACES trace('Existing asset return path: ${returnpath}'); #end
 			return returnpath;
 		}
@@ -72,13 +81,18 @@ class FileManager {
 		return '';
 	}
 
-	public static inline function unfoundAsset(asset:String, ?posinfo:PosInfos):Void {
-		if (!UNFOUND_ASSETS.contains(asset)) {
-			if (asset.contains('mods/')) {
+	public static inline function unfoundAsset(asset:String, ?posinfo:PosInfos):Void
+	{
+		if (!UNFOUND_ASSETS.contains(asset))
+		{
+			if (asset.contains('mods/'))
+			{
 				#if EXCESS_TRACES
 				trace('Could not get asset: $asset'); // , posinfo);
 				#end
-			} else {
+			}
+			else
+			{
 				trace('Could not get asset: $asset'); // , posinfo);
 			}
 			UNFOUND_ASSETS.push(asset);
@@ -91,10 +105,12 @@ class FileManager {
 	 * @param PATH_TYPE Assets folder
 	 * @return String
 	 */
-	public static function getAssetFile(file:String, ?PATH_TYPE:PathTypes = DEFAULT, ?posinfo:PosInfos):String {
+	public static function getAssetFile(file:String, ?PATH_TYPE:PathTypes = DEFAULT, ?posinfo:PosInfos):String
+	{
 		var returnPath:String = '';
 
-		if (returnPath == '') {
+		if (returnPath == '')
+		{
 			returnPath = getPath('assets/', '$file', PATH_TYPE, posinfo); // 'assets/$file'
 		}
 
@@ -113,7 +129,8 @@ class FileManager {
 	 * @param PATH_TYPE Assets folder
 	 * @return String
 	 */
-	public static function getScriptFile(file:String, ?PATH_TYPE:PathTypes = DEFAULT, ?posinfo:PosInfos):String {
+	public static function getScriptFile(file:String, ?PATH_TYPE:PathTypes = DEFAULT, ?posinfo:PosInfos):String
+	{
 		var finalPath:Dynamic = 'scripts/$file'; // .$SCRIPT_EXT';
 
 		#if SCRIPT_FILES_IN_DATA_FOLDER
@@ -124,56 +141,70 @@ class FileManager {
 	}
 
 	#if sys
-	public static function getScriptArray():Array<String> {
+	public static function getScriptArray():Array<String>
+	{
 		var arr:Array<String> = [];
 		var scriptPaths:Array<String> = ['assets/scripts/'];
 		var scriptExtensions:Array<String> = ['.hx', '.hxc'];
 
 		var readFolder:Dynamic = function(folder:String, ogdir:String) {};
 
-		var readFileFolder:Dynamic = function(folder:String, ogdir:String) {
+		var readFileFolder:Dynamic = function(folder:String, ogdir:String)
+		{
 			#if EXCESS_TRACES
 			trace('${ogdir}${folder}');
 			#end
 
-			for (file in readDirectory('${ogdir}${folder}')) {
+			for (file in readDirectory('${ogdir}${folder}'))
+			{
 				final endsplitter:String = '${!folder.endsWith('/') && !file.startsWith('/') ? '/' : ''}';
-				for (extension in scriptExtensions) {
-					if (file.endsWith(extension)) {
+				for (extension in scriptExtensions)
+				{
+					if (file.endsWith(extension))
+					{
 						final path:String = '${ogdir}${folder}${endsplitter}${file}';
 
-						if (!arr.contains(path)) {
+						if (!arr.contains(path))
+						{
 							arr.push('${path}');
 						}
 					}
 				}
 
-				if (!file.contains('.')) {
+				if (!file.contains('.'))
+				{
 					readFolder('${file}', '${ogdir}${folder}${endsplitter}');
 				}
 			}
 		}
 
-		readFolder = function(folder:String, ogdir:String) {
+		readFolder = function(folder:String, ogdir:String)
+		{
 			#if EXCESS_TRACES
 			trace('reading ${ogdir}${folder}');
 			#end
 
-			TryCatch.tryCatch(function() {
-				if (!folder.contains('.')) {
+			TryCatch.tryCatch(function()
+			{
+				if (!folder.contains('.'))
+				{
 					readFileFolder(folder, '${ogdir}');
-				} else {
+				}
+				else
+				{
 					readFileFolder(ogdir, '');
 				}
 			}, {
-				traceErr: true
+					traceErr: true
 			});
 		}
-		var readDir:Dynamic = function(directory:String) {
+		var readDir:Dynamic = function(directory:String)
+		{
 			#if EXCESS_TRACES
 			trace('reading ${directory}');
 			#end
-			for (folder in FileSystem.readDirectory(directory)) {
+			for (folder in FileSystem.readDirectory(directory))
+			{
 				readFolder(folder, directory);
 			}
 		}
@@ -196,7 +227,8 @@ class FileManager {
 			}
 		 */
 
-		for (path in scriptPaths) {
+		for (path in scriptPaths)
+		{
 			#if EXCESS_TRACES
 			trace('reading scriptPath: $path');
 			#end
@@ -204,7 +236,8 @@ class FileManager {
 		}
 
 		var traceArr:Array<String> = [];
-		for (path in arr) {
+		for (path in arr)
+		{
 			var split = path.split('/');
 			traceArr.push(split[split.length - 1]);
 		}
@@ -213,7 +246,8 @@ class FileManager {
 		return arr;
 	}
 	#else
-	public static function getScriptArray():Array<String> {
+	public static function getScriptArray():Array<String>
+	{
 		trace('Not Sys!');
 		return [];
 	}
@@ -228,14 +262,16 @@ class FileManager {
 	/**
 	 * Dummy function for if not `SCRIPT_FILES`
 	 */
-	public static function getScriptFile(?file:String = '', ?PATH_TYPE:PathTypes = DEFAULT, ?posinfo:PosInfos):String {
+	public static function getScriptFile(?file:String = '', ?PATH_TYPE:PathTypes = DEFAULT, ?posinfo:PosInfos):String
+	{
 		return '';
 	}
 
 	/**
 	 * Dummy function for if not `SCRIPT_FILES`
 	 */
-	public static function getScriptArray():Array<String> {
+	public static function getScriptArray():Array<String>
+	{
 		return [];
 	}
 	#end
@@ -264,7 +300,8 @@ class FileManager {
 	 * @param PATH_TYPE Assets folder
 	 * @return String
 	 */
-	public static function getSoundFile(file:String, ?PATH_TYPE:PathTypes = DEFAULT, ?posinfo:PosInfos):String {
+	public static function getSoundFile(file:String, ?PATH_TYPE:PathTypes = DEFAULT, ?posinfo:PosInfos):String
+	{
 		return getAssetFile('$file.$SOUND_EXT', PATH_TYPE, posinfo);
 	}
 
@@ -273,16 +310,33 @@ class FileManager {
 	 * @param path File path
 	 * @param content File content
 	 */
-	public static function writeToPath(path:String, content:String):Void {
+	public static function writeToPath(path:String, content:String):Void
+	{
 		#if sys
-		if (path.length > 0) {
-			if (!readDirectory('').contains(path.split('/')[0]))
-				FileSystem.createDirectory(path.split('/')[0]);
+		if (path.length > 0)
+		{
+			var prevDir:String = '';
+			for (dir in path.split('/'))
+			{
+				if (!readDirectory(prevDir).contains(dir))
+				{
+					FileSystem.createDirectory(dir);
+					trace('creating $prevDir/$dir');
+				}
+
+				prevDir += dir + '/';
+			}
 
 			if (!exists(path))
+			{
 				File.write(path, false);
+				trace('generating $path');
+			}
 			File.saveContent(path, content);
-		} else {
+			trace('writing to $path');
+		}
+		else
+		{
 			throw 'A path is required.';
 		}
 		#else
@@ -294,24 +348,28 @@ class FileManager {
 	 * Read a file using `lime.utils.Assets` and a try catch function
 	 * @param path the path of the file your trying to read
 	 */
-	public static function readFile(path:String, ?posinfo:PosInfos):String {
-		if (!exists(path)) {
+	public static function readFile(path:String, ?posinfo:PosInfos):String
+	{
+		if (!exists(path))
+		{
 			unfoundAsset(path, posinfo);
 			return '';
 		}
 
 		#if sys
-		return TryCatch.tryCatch(function() {
+		return TryCatch.tryCatch(function()
+		{
 			return File.getContent(path);
 		}, {
-			traceErr: true
+				traceErr: true
 		});
 		#end
 
-		return TryCatch.tryCatch(function() {
+		return TryCatch.tryCatch(function()
+		{
 			return Assets.getText(path);
 		}, {
-			traceErr: true
+				traceErr: true
 		});
 
 		return '';
@@ -321,16 +379,19 @@ class FileManager {
 	 * Reads a file that SHOULD BE A JSON, using `readFile`
 	 * @param path the path of the json your trying to get
 	 */
-	public static function getJSON(path:String, ?posinfo:PosInfos):Dynamic {
+	public static function getJSON(path:String, ?posinfo:PosInfos):Dynamic
+	{
 		var json:Dynamic = null;
 		var file:String = readFile(path, posinfo);
 
-		TryCatch.tryCatch(function() {
+		TryCatch.tryCatch(function()
+		{
 			json = Json.parse(file);
 		}, {
-			errFunc: function() {
-				json = file;
-			}
+				errFunc: function()
+				{
+					json = file;
+				}
 		});
 
 		return json;
@@ -340,20 +401,26 @@ class FileManager {
 	 * Reads a directory if `sys` via `FileSystem.readDirectory`
 	 * @param dir This is the directory being read
 	 */
-	public static function readDirectory(dir:String, ?typeArr:Array<String>):Array<String> {
+	public static function readDirectory(dir:String, ?typeArr:Array<String>):Array<String>
+	{
 		var finalList:Array<String> = [];
 		var rawList:Array<String> = [];
 
 		#if sys
 		rawList = FileSystem.readDirectory(dir);
-		for (i in 0...rawList.length) {
-			if (typeArr?.length > 0) {
-				for (type in typeArr) {
-					if (rawList[i].endsWith(type)) {
+		for (i in 0...rawList.length)
+		{
+			if (typeArr?.length > 0)
+			{
+				for (type in typeArr)
+				{
+					if (rawList[i].endsWith(type))
+					{
 						finalList.push(rawList[i]);
 					}
 				}
-			} else
+			}
+			else
 				finalList.push(rawList[i]);
 		}
 
@@ -368,15 +435,25 @@ class FileManager {
 	 * @param path the path your checking
 	 * @return Bool
 	 */
-	public static function exists(path:String):Bool {
-		return openfl.utils.Assets.exists(path);
+	public static function exists(path:String):Bool
+	{
+		var val = openfl.utils.Assets.exists(path);
+		if (!val)
+		{
+			#if sys val = FileSystem.exists(path); #end
+			if (!val)
+				unfoundAsset(path);
+		}
+		return val;
 	}
 
-	public static function getPackerAtlas(path:String, ?path_type:PathTypes, ?posinfo:PosInfos):FlxAtlasFrames {
+	public static function getPackerAtlas(path:String, ?path_type:PathTypes, ?posinfo:PosInfos):FlxAtlasFrames
+	{
 		return FlxAtlasFrames.fromSpriteSheetPacker(getImageFile(path, path_type, posinfo), getImageFile('$path', path_type, posinfo).replace('.png', '.txt'));
 	}
 
-	public static function getSparrowAtlas(path:String, ?path_type:PathTypes, ?posinfo:PosInfos) {
+	public static function getSparrowAtlas(path:String, ?path_type:PathTypes, ?posinfo:PosInfos)
+	{
 		return FlxAtlasFrames.fromSparrow(getImageFile(path, path_type, posinfo), getImageFile('$path', path_type, posinfo).replace('.png', '.xml'));
 	}
 }
@@ -384,6 +461,7 @@ class FileManager {
 /**
  * This would hold Asset folders, for example `assets/default` or `assets/gameplay`
  */
-enum abstract PathTypes(String) from String to String {
+enum abstract PathTypes(String) from String to String
+{
 	public var DEFAULT:String = '';
 }
