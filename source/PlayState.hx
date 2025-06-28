@@ -1,11 +1,14 @@
 package;
 
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.math.FlxMath;
 import flixel.math.FlxRandom;
 import flixel.text.FlxText;
 
 class PlayState extends FlxState
 {
+	public static var present:String = '';
+
 	var randomWorld:Bool = true;
 
 	override public function new(?file:String)
@@ -35,9 +38,25 @@ class PlayState extends FlxState
 		'dirt_offset_min': 0,
 		'dirt_offset_max': 3,
 		'stone': 8,
+		// inferno
+		'inferno_dirt': 15,
+		'inferno_dirt_offset_min': 0,
+		'inferno_dirt_offset_max': 10,
+		'inferno': 12,
+		'inferno_lava': 2,
 	};
 
-	public var blocks:Array<String> = ['stone', 'grass', 'dirt'];
+	public var blocks:Array<String> = [
+		'stone',
+		'grass',
+		'dirt',
+		'inferno',
+		'inferno_dirt',
+		'tree_log_front',
+		'tree_log_side',
+		'lava',
+		'gold'
+	];
 	public var wools:Array<String> = [
 		'red', 'orange', 'yellow', 'green', 'lime', 'cyan', 'blue', 'purple', 'pink', 'brown', 'gray', 'white', 'black'
 	];
@@ -95,13 +114,26 @@ class PlayState extends FlxState
 		#end
 		var block_tag:String = 'air';
 
-		if (y > worldHeight - worldLayers.grass)
-			block_tag = 'grass';
-		final dirtRandom:Int = new FlxRandom().int(worldLayers.dirt_offset_min, worldLayers.dirt_offset_max);
-		if (y > worldHeight - (worldLayers.dirt))
-			block_tag = 'dirt';
-		if (y > worldHeight - (worldLayers.stone - dirtRandom))
-			block_tag = 'stone';
+		if (present == 'inferno')
+		{
+			final dirtRandom:Int = new FlxRandom().int(worldLayers.inferno_dirt_offset_min, worldLayers.inferno_dirt_offset_max);
+			if (y > worldHeight - (worldLayers.inferno_dirt + FlxMath.roundDecimal(dirtRandom / 2, 0)))
+				block_tag = 'inferno_dirt';
+			if (y > worldHeight - (worldLayers.inferno - dirtRandom))
+				block_tag = 'inferno';
+			if (y > worldHeight - (worldLayers.inferno_lava))
+				block_tag = 'lava';
+		}
+		else
+		{
+			if (y > worldHeight - worldLayers.grass)
+				block_tag = 'grass';
+			final dirtRandom:Int = new FlxRandom().int(worldLayers.dirt_offset_min, worldLayers.dirt_offset_max);
+			if (y > worldHeight - (worldLayers.dirt))
+				block_tag = 'dirt';
+			if (y > worldHeight - (worldLayers.stone - dirtRandom))
+				block_tag = 'stone';
+		}
 
 		var block:Block = new Block(block_tag, 0, 0);
 		block.scale.set(blockScale, blockScale);
@@ -217,7 +249,7 @@ class PlayState extends FlxState
 		if (Json.stringify(data) == '' || data.world == null)
 			return;
 
-		if (worldBlocks != null)
+		if (worldBlocks != null && worldBlocks.length > 0)
 		{
 			for (block in worldBlocks)
 			{

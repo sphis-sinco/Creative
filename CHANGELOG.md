@@ -1,5 +1,8 @@
 # 2025-06-27
 ## 0.3.0
+- Added animated block support via a simple json file (example with the [new lava animated block](./assets/images/blocks/blocks-lava.json))
+- Added several new blocks
+- Added a inferno world present playable through the main menu
 - Added present list dropdown to the mainmenu to select other presents when they are added
 - Removed new_tag_id trace
 - Added Autogenerate block list option
