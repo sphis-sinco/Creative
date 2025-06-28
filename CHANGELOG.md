@@ -1,5 +1,7 @@
 # 2025-06-28
 ## 0.4.0
+- When a save path isnt found, `save.json` isn't loaded
+- Added more blocks
 - Added app icon
 - Added "Backup files" setting
 - Changed "Autogenerate-block list" settings button when interacted with

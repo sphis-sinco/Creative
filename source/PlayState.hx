@@ -80,6 +80,7 @@ class PlayState extends State
 		'diamond_ore',
 		'emerald_ore',
 		'rainbow',
+		'portal',
 	];
 
 	private static var blocks:Array<String> = [];
@@ -473,8 +474,6 @@ class PlayState extends State
 			else
 			{
 				saveMsg.text = 'Path "$path" doesn\'t exist ';
-
-				loadWorld();
 			}
 		}
 		if (FlxG.keys.justReleased.A && !inputText_hasFocus)
