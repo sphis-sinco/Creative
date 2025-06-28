@@ -1,5 +1,6 @@
 # 2025-06-27
 ## 0.3.1
+- Added more blocks
 - Added Splash texts to the Main menu
 
 ## 0.3.0

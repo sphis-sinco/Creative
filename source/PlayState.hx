@@ -63,6 +63,10 @@ class PlayState extends FlxState
 		'iron',
 		'diamond',
 		'emerald',
+		'gold_ore',
+		'iron_ore',
+		'diamond_ore',
+		'emerald_ore',
 	];
 	public var wools:Array<String> = [
 		'red', 'orange', 'yellow', 'green', 'lime', 'cyan', 'blue', 'purple', 'pink', 'brown', 'gray', 'white', 'black'
