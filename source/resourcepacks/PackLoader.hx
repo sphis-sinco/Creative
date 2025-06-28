@@ -18,6 +18,8 @@ class PackLoader
 		RESOURCE_PACKS = [];
 		RESOURCE_PACK_LOCATIONS = [];
 
+		var existingPacklist:Array<String> = FileManager.readFile('resourcepacks/packlist.txt').split('\n');
+
 		#if sys
 		var resourcePackFolder = FileManager.readDirectory('$RPF');
 		for (item in resourcePackFolder)
@@ -50,10 +52,29 @@ class PackLoader
 
 					if (!RESOURCE_PACK_LOCATIONS.contains('$RPF/$folder') && !RESOURCE_PACKS.contains(pack))
 					{
-						ENABLED_RESOURCE_PACKS.push(pack);
-						ENABLED_RESOURCE_PACK_LOCATIONS.push(location.replace('/$item', ''));
 						RESOURCE_PACKS.push(pack);
 						RESOURCE_PACK_LOCATIONS.push(location.replace('/$item', ''));
+					}
+
+					if (existingPacklist != null)
+					{
+						for (modpack in existingPacklist)
+						{
+							if (modpack == folder)
+							{
+								ENABLED_RESOURCE_PACKS.push(pack);
+								ENABLED_RESOURCE_PACK_LOCATIONS.push(location.replace('/$item', ''));
+								break;
+							}
+						}
+					}
+					else if (modsEnabledByDefault)
+					{
+						if (!ENABLED_RESOURCE_PACK_LOCATIONS.contains('$RPF/$folder') && !ENABLED_RESOURCE_PACKS.contains(pack))
+						{
+							ENABLED_RESOURCE_PACKS.push(pack);
+							ENABLED_RESOURCE_PACK_LOCATIONS.push(location.replace('/$item', ''));
+						}
 					}
 				}
 			}
@@ -64,6 +85,8 @@ class PackLoader
 		trace('Not SYS');
 		#end
 	}
+
+	static var modsEnabledByDefault:Bool = false;
 
 	public static function genPacklist()
 	{

@@ -83,7 +83,7 @@ class MenuState extends State
 		var Mod:FlxButtonPlus = new FlxButtonPlus(0, 0, () ->
 		{
 			FlxG.switchState(() -> new ModMenu());
-		}, 'Mod menu', btnWidth);
+		}, 'Resource packs', btnWidth);
 		#if sys add(Mod); #end
 		Mod.screenCenter();
 		Mod.scale.set(2, 2);
