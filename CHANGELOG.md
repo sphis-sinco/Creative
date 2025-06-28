@@ -3,7 +3,7 @@
 - .community folder for community stuff
 - PlayState auto-block-list generation doesn't include any files that aren't a png
 - Added animated block support via a simple json file (example with the [new lava animated block](./assets/images/blocks/blocks-lava.json))
-- Added several new blocks
+- Added ***several*** new blocks
 - Added a inferno world present playable through the main menu
 - Added present list dropdown to the mainmenu to select other presents when they are added
 - Removed new_tag_id trace

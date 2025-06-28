@@ -55,7 +55,10 @@ class PlayState extends FlxState
 		'tree_log_front',
 		'tree_log_side',
 		'lava',
-		'gold'
+		'gold',
+		'iron',
+		'diamond',
+		'emerald',
 	];
 	public var wools:Array<String> = [
 		'red', 'orange', 'yellow', 'green', 'lime', 'cyan', 'blue', 'purple', 'pink', 'brown', 'gray', 'white', 'black'
