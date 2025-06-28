@@ -26,9 +26,5 @@ class NewBlocks
 				}
 			}
 		}
-
-		trace(NEW_BLOCKS);
-		trace(NEW_BLOCK_PREFIXES);
-		trace(NEW_BLOCK_MOD_NAMES);
 	}
 }

@@ -195,14 +195,10 @@ class PlayState extends State
 			blocks.push('${wool}_wool');
 		}
 
-		trace(blocks);
-
 		for (block in NewBlocks.NEW_BLOCKS)
 		{
 			blocks.push(block);
 		}
-
-		trace(blocks);
 
 		#if sys
 		if (SettingsMenu.Settings.auto_gen_block_list)

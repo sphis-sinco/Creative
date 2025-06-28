@@ -48,19 +48,24 @@ class PackLoader
 					if (pack.pack_format != PackClass.PACK_FORMAT)
 						trace('$folder has an outdated pack_format: ${pack.pack_format}');
 
-					RESOURCE_PACKS.push(pack);
-					RESOURCE_PACK_LOCATIONS.push(location.replace('/$item', ''));
+					if (!RESOURCE_PACK_LOCATIONS.contains('$RPF/$folder') && !RESOURCE_PACKS.contains(pack))
+					{
+						ENABLED_RESOURCE_PACKS.push(pack);
+						ENABLED_RESOURCE_PACK_LOCATIONS.push(location.replace('/$item', ''));
+						RESOURCE_PACKS.push(pack);
+						RESOURCE_PACK_LOCATIONS.push(location.replace('/$item', ''));
+					}
 				}
 			}
 		}
 		NewBlocks.getNewBlocks();
-		packlist();
+		genPacklist();
 		#else
 		trace('Not SYS');
 		#end
 	}
 
-	public static function packlist()
+	public static function genPacklist()
 	{
 		var packlist:String = '';
 		var i = 0;
@@ -68,10 +73,8 @@ class PackLoader
 		{
 			var folder = mod.split('/')[1];
 
-			if (!RESOURCE_PACK_LOCATIONS.contains('$RPF/$folder') && !packlist.contains(folder))
-			{
+			if (!packlist.contains(folder))
 				packlist += '$folder\n';
-			}
 			i++;
 		}
 		trace(packlist);

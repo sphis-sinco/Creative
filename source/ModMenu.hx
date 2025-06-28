@@ -21,7 +21,28 @@ class ModMenu extends FlxState
 		add(grpMods);
 
 		refreshModList();
+		getModById = function(id:String, func:Dynamic)
+		{
+			var i = 0;
+			for (mod in PackLoader.RESOURCE_PACK_LOCATIONS)
+			{
+				if (mod.split('/')[1] == id)
+				{
+					modA = mod;
+					iA = i;
+					func(modA, iA);
+					trace(mod.split('/')[1]);
+					break;
+				}
+
+				i++;
+			}
+		};
 	}
+
+	var modA = '';
+	var iA = 0;
+	var getModById:Dynamic;
 
 	override function update(elapsed:Float)
 	{
@@ -39,53 +60,46 @@ class ModMenu extends FlxState
 		{
 			grpMods.members[curSelected].modEnabled = !grpMods.members[curSelected].modEnabled;
 
-                        if (!grpMods.members[curSelected].modEnabled)
-                        {
-                                var i = 0;
-                                for (mod in PackLoader.RESOURCE_PACK_LOCATIONS)
-                                {
-                                        trace(mod.split('/')[1]);
-                                        if (mod.split('/')[1] == grpMods.members[curSelected].text)
-                                        {
-                                                PackLoader.ENABLED_RESOURCE_PACK_LOCATIONS.remove(mod);
-                                                PackLoader.ENABLED_RESOURCE_PACKS.remove(PackLoader.ENABLED_RESOURCE_PACKS[i]);
-                                        }
+			if (!grpMods.members[curSelected].modEnabled)
+			{
+				getModById(grpMods.members[curSelected].text, () ->
+				{
+					PackLoader.ENABLED_RESOURCE_PACK_LOCATIONS.remove(modA);
+					PackLoader.ENABLED_RESOURCE_PACKS.remove(PackLoader.ENABLED_RESOURCE_PACKS[iA]);
+				});
+			}
+			else
+			{
+				getModById(grpMods.members[curSelected].text, () ->
+				{
+					PackLoader.ENABLED_RESOURCE_PACK_LOCATIONS.push(modA);
+					PackLoader.ENABLED_RESOURCE_PACKS.push(PackLoader.RESOURCE_PACKS[iA]);
+				});
+			}
 
-                                        i++;
-                                }
-                        } else {
-                                
-                                var i = 0;
-                                for (mod in PackLoader.RESOURCE_PACK_LOCATIONS)
-                                {
-                                        trace(mod.split('/')[1]);
-                                        if (mod.split('/')[1] == grpMods.members[curSelected].text)
-                                        {
-                                                PackLoader.ENABLED_RESOURCE_PACK_LOCATIONS.push(mod);
-                                                PackLoader.ENABLED_RESOURCE_PACKS.push(PackLoader.ENABLED_RESOURCE_PACKS[i]);
-                                        }
-
-                                        i++;
-                                }
-                        }
-
-                        PackLoader.packlist();
+			NewBlocks.getNewBlocks();
+			PackLoader.genPacklist();
 		}
 
-		if (FlxG.keys.justPressed.I && curSelected != 0)
-		{
-			var oldOne = grpMods.members[curSelected - 1];
-			grpMods.members[curSelected - 1] = grpMods.members[curSelected];
-			grpMods.members[curSelected] = oldOne;
-			selections(-1);
-		}
+		/* if (FlxG.keys.justPressed.I && curSelected != 0)
+			{
+				var oldOne = grpMods.members[curSelected - 1];
+				grpMods.members[curSelected - 1] = grpMods.members[curSelected];
+				grpMods.members[curSelected] = oldOne;
+				selections(-1);
+			}
 
-		if (FlxG.keys.justPressed.K && curSelected < grpMods.members.length - 1)
+			if (FlxG.keys.justPressed.K && curSelected < grpMods.members.length - 1)
+			{
+				var oldOne = grpMods.members[curSelected + 1];
+				grpMods.members[curSelected + 1] = grpMods.members[curSelected];
+				grpMods.members[curSelected] = oldOne;
+				selections(1);
+		}*/
+
+		if (FlxG.keys.justReleased.ESCAPE)
 		{
-			var oldOne = grpMods.members[curSelected + 1];
-			grpMods.members[curSelected + 1] = grpMods.members[curSelected];
-			grpMods.members[curSelected] = oldOne;
-			selections(1);
+			FlxG.switchState(() -> new MenuState());
 		}
 
 		super.update(elapsed);
@@ -131,17 +145,17 @@ class ModMenu extends FlxState
 
 		enabledMods = [];
 
-                for (mod in FileManager.readFile('${PackLoader.RPF}/packlist.txt').split('\n'))
-                {
-                        enabledMods.push(mod);
-                }
+		for (mod in FileManager.readFile('${PackLoader.RPF}/packlist.txt').split('\n'))
+		{
+			enabledMods.push(mod);
+		}
 
 		var loopNum:Int = 0;
 		for (i in modFolders)
 		{
 			var txt:ModMenuItem = new ModMenuItem(0, 10 + (40 * loopNum), 0, i, 32);
 			txt.text = i;
-                        txt.modEnabled = enabledMods[loopNum] == txt.text;
+			txt.modEnabled = enabledMods[loopNum] == txt.text;
 			grpMods.add(txt);
 
 			loopNum++;
