@@ -56,6 +56,8 @@ class PlayState extends FlxState
 		'tree_log_side',
 		'tree_log_side_vertical',
 		'plank',
+		'door_top',
+		'door_bottom',
 		'lava',
 		'gold',
 		'iron',
