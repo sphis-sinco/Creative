@@ -3,8 +3,8 @@ package;
 class Version {
         public static var MajorVersion:Int = 0;
 	public static var MinorVersion:Int = 4;
-	public static var PatchVersion:Int = 0;
-	public static var HotfixVersion:Int = 1;
+	public static var PatchVersion:Int = 1;
+	public static var HotfixVersion:Int = 0;
         public static var Suffix:String = '';
 
         public static function generateVersionString(patch:Bool, hotfix:Bool, suffix:Bool)

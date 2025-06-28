@@ -203,7 +203,8 @@ class PlayState extends State
 		}
 		for (wool in wools)
 		{
-			blocks.push('${wool}_wool');
+			break;
+			// blocks.push('${wool}_wool');
 		}
 
 		for (block in NewBlocks.NEW_BLOCKS)

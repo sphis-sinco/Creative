@@ -1,4 +1,7 @@
 # 2025-06-28
+## 0.4.1
+- (Most of) the game's blocks have been split into seperate mods replacing the original example_packs
+
 ## 0.4.0_01
 - Fixed Backups option button being visible on non-sys platforms
 - Fixed Settings json not having the Backups option initally
@@ -6,6 +9,7 @@
 - Fixed portal block not being animated
 
 ## 0.4.0
+- Accidentally left in 2 example_packs
 - When a save path isnt found, `save.json` isn't loaded
 - Added more blocks
 - Added app icon
