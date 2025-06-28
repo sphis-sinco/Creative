@@ -1,5 +1,6 @@
 # 2025-06-28
 ## 0.3.4
+- Debug substate worldWidth and worldHeight texts have been moved
 - Added new splash texts
 
 ## 0.3.3_02
