@@ -36,7 +36,6 @@ class PlayState extends State
 			PlaystateDebugSubState.init();
 		}
 		blocks = [];
-
 	}
 
 	public static var blockScale:Int = 2;
@@ -66,23 +65,9 @@ class PlayState extends State
 		'dirt',
 		'inferno',
 		'inferno_dirt',
-		'tree_log_front',
-		'tree_log_side',
-		'tree_log_side_vertical',
-		'plank',
-		'door_top',
-		'door_bottom',
 		'lava',
-		'gold',
-		'iron',
-		'diamond',
-		'emerald',
-		'gold_ore',
-		'iron_ore',
-		'diamond_ore',
-		'emerald_ore',
-		'rainbow',
 		'portal',
+		'rainbow',
 		'sand',
 	];
 
@@ -631,6 +616,7 @@ class PlayState extends State
 		}
 		CurrentBlockText.text = CurrentBlock.block_tag;
 	}
+
 	public function blockGravities()
 	{
 		return;

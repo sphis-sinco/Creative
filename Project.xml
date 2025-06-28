@@ -125,5 +125,5 @@
 	<!--Place
 	custom nodes like icons here-->
 	<!-- <icon path="" size=""/> -->
-	<icon path="/icon.png" />
+	<icon path="./icon.png" />
 </project>
