@@ -240,11 +240,11 @@ class PlayState extends State
 		CurrentBlockText = new FlxText(CurrentBlock.x + CurrentBlock.width + 10, CurrentBlock.y, 0, 'stone', 16);
 		add(CurrentBlockText);
 		saveName = new FlxUIInputText(0, 0, 666, 'save', 16);
-		add(saveName);
+		#if sys add(saveName); #end
 		saveName.setPosition(verText.x, verText.y + verText.height + 10);
 
 		saveFolder = new FlxUIInputText(0, 0, 666, 'customsaves', 16);
-		add(saveFolder);
+		#if sys add(saveFolder); #end
 		saveFolder.setPosition(saveName.x, saveName.y + saveName.height + 10);
 
 		add(MouseBlock);
