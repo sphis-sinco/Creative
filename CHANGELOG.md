@@ -1,5 +1,6 @@
 # 2025-06-28
 ## 0.4.0
+- Added app icon
 - Added "Backup files" setting
 - Changed "Autogenerate-block list" settings button when interacted with
 - Added Message below save inputs saying any message from loading or saving worlds
