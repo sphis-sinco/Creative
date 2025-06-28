@@ -1,5 +1,6 @@
 # 2025-06-28
 ## 0.3.3_02
+- Changelog dates fixed
 - Code optimizations were made
 
 ## 0.3.3_01
