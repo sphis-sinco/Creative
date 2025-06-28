@@ -1,5 +1,7 @@
 # 2025-06-27
 ## 0.3.0
+- Added Autogenerate block list option
+- Added SettingsMenu
 - In PlayState the array of blocks generated from the blocks image folder trace now required the BLOCK_TRACES conditional
 - In PlayState it displays the control to leave the state
 - In PlayState it displays if you support sys

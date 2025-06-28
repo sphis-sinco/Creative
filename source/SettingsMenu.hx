@@ -1,0 +1,38 @@
+package;
+
+import flixel.addons.ui.FlxButtonPlus;
+
+class SettingsMenu extends FlxState
+{
+        public static var Settings = {
+                auto_gen_block_list: true
+        };
+
+        var autoGenerateBlockList:FlxButtonPlus;
+
+        override function create() {
+                super.create();
+
+                Settings = FileManager.getJSON('settings.json');
+
+                autoGenerateBlockList = new FlxButtonPlus(80, 20, () ->
+		{
+			Settings.auto_gen_block_list = !Settings.auto_gen_block_list;
+                        autoGenerateBlockList.text = 'Autogenerate block list (${Settings.auto_gen_block_list})';
+		}, 'Autogenerate block list (${Settings.auto_gen_block_list})', MenuState.btnWidth);
+		add(autoGenerateBlockList);
+                autoGenerateBlockList.scale.set(2, 2);
+        }
+
+        override function update(elapsed:Float) {
+                super.update(elapsed);
+
+                if (FlxG.keys.justReleased.ESCAPE)
+                {
+                        FileManager.writeToPath('settings.json', Json.stringify(Settings));
+
+                        FlxG.switchState(() -> new MenuState());
+                }
+        }
+        
+}

@@ -6,6 +6,22 @@ import flixel.text.FlxText;
 
 class PlayState extends FlxState
 {
+	var randomWorld:Bool = true;
+
+	override public function new(?file:String)
+	{
+		super();
+
+		#if sys
+		if (file != null)
+		{
+			randomWorld = false;
+			trace('non-randomWorld');
+			loadWorld(file);
+		}
+		#end
+	}
+
 	public static var blockScale:Int = 2;
 
 	public static var worldWidth:Int = 39;
@@ -26,7 +42,7 @@ class PlayState extends FlxState
 		'red', 'orange', 'yellow', 'green', 'lime', 'cyan', 'blue', 'purple', 'pink', 'brown', 'gray', 'white', 'black'
 	];
 
-	public static var worldBlocks:FlxTypedGroup<Block> = new FlxTypedGroup<Block>();
+	public static var worldBlocks:FlxTypedGroup<Block>;
 
 	public function worldRender()
 	{
@@ -105,22 +121,25 @@ class PlayState extends FlxState
 		}
 
 		#if sys
-		var blocksArr:Array<String> = FileManager.readDirectory('assets/images/blocks');
-
-		if (blocksArr.length > 0)
+		if (SettingsMenu.Settings.auto_gen_block_list)
 		{
-			blocks = [];
-			for (block in blocksArr)
+			var blocksArr:Array<String> = FileManager.readDirectory('assets/images/blocks');
+
+			if (blocksArr.length > 0)
 			{
-				blocks.push(block.replace('blocks-', '').replace('.png', ''));
+				blocks = [];
+				for (block in blocksArr)
+				{
+					blocks.push(block.replace('blocks-', '').replace('.png', ''));
+				}
+
+				blocks.remove('air');
+				blocks.remove('blocks.aseprite');
+
+				#if BLOCK_TRACES
+				trace(blocks);
+				#end
 			}
-
-			blocks.remove('air');
-			blocks.remove('blocks.aseprite');
-
-			#if BLOCK_TRACES
-			trace(blocks);
-			#end
 		}
 		#end
 
@@ -130,6 +149,7 @@ class PlayState extends FlxState
 			+ Version.generateVersionString(true, true, true), 16);
 		add(VersionText);
 		VersionText.scrollFactor.set(0, 0);
+
 		#if debug
 		WorldWidthText = new FlxText(10, 10 + VersionText.y + VersionText.height, 0, 'World width: ' + Std.string(worldWidth), 16);
 		WorldHeightText = new FlxText(10, 10 + WorldWidthText.y + WorldWidthText.height, 0, 'World height: ' + Std.string(worldHeight), 16);
@@ -146,8 +166,10 @@ class PlayState extends FlxState
 		MouseBlock = new MouseBlock(0, 0);
 		MouseBlock.scale.set(blockScale, blockScale);
 
+		worldBlocks = new FlxTypedGroup<Block>();
+		add(worldBlocks);
 		if (randomWorld)
-			add(worldBlocks);
+			worldInit();
 		CurrentBlock = new Block('stone', VersionText.x + VersionText.width + 10, 10);
 		CurrentBlock.scale.set(blockScale, blockScale);
 		add(CurrentBlock);
@@ -163,15 +185,18 @@ class PlayState extends FlxState
 	{
 		var worldData = [];
 
-		for (block in worldBlocks)
+		if (worldBlocks.length > 0)
 		{
-			var data = {
-				x: block.x,
-				y: block.y,
-				tag: block.block_tag
-			}
+			for (block in worldBlocks)
+			{
+				var data = {
+					x: block.x,
+					y: block.y,
+					tag: block.block_tag
+				}
 
-			worldData.push(data);
+				worldData.push(data);
+			}
 		}
 
 		var data:WorldSave = {
@@ -192,13 +217,10 @@ class PlayState extends FlxState
 		if (Json.stringify(data) == '' || data.world == null)
 			return;
 
-		if (worldBlocks.length > 0)
+		for (block in worldBlocks)
 		{
-			for (block in worldBlocks)
-			{
-				block.destroy();
-				worldBlocks.remove(block);
-			}
+			block.destroy();
+			worldBlocks.remove(block);
 		}
 
 		for (blockData in data.world)
@@ -213,21 +235,6 @@ class PlayState extends FlxState
 		}
 	}
 	#end
-
-	var randomWorld:Bool = true;
-
-	override public function new(?file:String = null)
-	{
-		super();
-
-		#if sys
-		if (file != null)
-		{
-			randomWorld = false;
-			loadWorld(file);
-		}
-		#end
-	}
 
 	var WorldWidthText:FlxText;
 	var WorldHeightText:FlxText;
