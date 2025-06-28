@@ -501,7 +501,9 @@ class PlayState extends State
 		#else
 		if (FlxG.keys.justReleased.ESCAPE && !inputText_hasFocus)
 		{
+			#if sys
 			saveWorld(backupLocation);
+			#end
 			FlxG.switchState(() -> new MenuState());
 		}
 		#end
