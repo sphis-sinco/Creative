@@ -299,6 +299,7 @@ class PlayState extends State
 			required_packs: REQUIRED_PACKS
 		};
 
+		saveMsg.text = 'Saved world to  $file.json';
 		FileManager.writeToPath('$file.json', Json.stringify(data));
 	}
 
