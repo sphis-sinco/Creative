@@ -1,4 +1,5 @@
 # 2025-06-27
+## 0.3.1
 ## 0.3.0
 - .community folder for community stuff
 - PlayState auto-block-list generation doesn't include any files that aren't a png
