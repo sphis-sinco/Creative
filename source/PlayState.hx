@@ -23,6 +23,7 @@ class PlayState extends State
 	{
 		super();
 
+		blocks = [];
 		#if sys
 		if (file != null)
 		{
@@ -35,7 +36,6 @@ class PlayState extends State
 		{
 			PlaystateDebugSubState.init();
 		}
-		blocks = [];
 	}
 
 	public static var blockScale:Int = 2;
@@ -72,10 +72,6 @@ class PlayState extends State
 	];
 
 	private static var blocks:Array<String> = [];
-
-	public var wools:Array<String> = [
-		'red', 'orange', 'yellow', 'green', 'lime', 'cyan', 'blue', 'purple', 'pink', 'brown', 'gray', 'white', 'black'
-	];
 
 	public static var worldBlocks:FlxTypedGroup<Block>;
 
@@ -186,12 +182,6 @@ class PlayState extends State
 		{
 			blocks.push(block);
 		}
-		for (wool in wools)
-		{
-			break;
-			// blocks.push('${wool}_wool');
-		}
-
 		for (block in NewBlocks.NEW_BLOCKS)
 		{
 			blocks.push(block);
@@ -454,8 +444,6 @@ class PlayState extends State
 				new_tag_id = blocks.length - 1;
 			else if (new_tag_id > blocks.length - 1)
 				new_tag_id = 0;
-			// trace(new_tag_id);
-
 			new_tag = blocks[new_tag_id];
 			CurrentBlock.changeBlock(new_tag);
 		}
