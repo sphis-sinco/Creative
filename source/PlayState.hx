@@ -169,8 +169,15 @@ class PlayState extends FlxState
 	{
 		super.create();
 
+		var skyBG:String = 'sky';
+		skyBG += present != '' ? '-$present' : '';
+		trace(skyBG);
+
+		if (!FileManager.exists(FileManager.getImageFile(skyBG)))
+			skyBG = 'sky';
+
 		var sky:FlxSprite = new FlxSprite();
-		sky.loadGraphic(FileManager.getImageFile('sky'));
+		sky.loadGraphic(FileManager.getImageFile(skyBG));
 		sky.scale.set(1280, 720);
 		add(sky);
 
