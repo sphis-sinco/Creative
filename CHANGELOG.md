@@ -1,5 +1,5 @@
 # 2025-06-28
-## 0.4.1
+## 0.4.0_02
 - Fixed new app icon not working
 
 ## 0.4.0_01
