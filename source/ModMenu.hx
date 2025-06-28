@@ -13,6 +13,8 @@ class ModMenu extends FlxState
 
 	var curSelected:Int = 0;
 
+	var camFollow:FlxObject;
+
 	public function new():Void
 	{
 		super();
@@ -38,6 +40,17 @@ class ModMenu extends FlxState
 				i++;
 			}
 		};
+	}
+
+	override function create()
+	{
+		super.create();
+
+		camFollow = new FlxObject(0, -400, 1280, 720);
+		add(camFollow);
+
+		FlxG.camera.follow(camFollow, LOCKON, 0.1);
+		FlxG.camera.focusOn(camFollow.getPosition());
 	}
 
 	var modA = '';
@@ -119,10 +132,12 @@ class ModMenu extends FlxState
 			if (txt == curSelected)
 			{
 				grpMods.members[txt].color = FlxColor.YELLOW;
+				camFollow.y = -400 + grpMods.members[txt].y;
 			}
 			else
 				grpMods.members[txt].color = FlxColor.WHITE;
 		}
+
 
 		organizeByY();
 	}
