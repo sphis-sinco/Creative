@@ -1,7 +1,6 @@
 # 2025-06-28
 ## 0.4.1
 - Fixed new app icon not working
-- (Most of) the game's blocks have been split into seperate mods replacing the original example_packs
 
 ## 0.4.0_01
 - Fixed Backups option button being visible on non-sys platforms
