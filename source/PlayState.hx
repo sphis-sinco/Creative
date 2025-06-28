@@ -418,7 +418,7 @@ class PlayState extends State
 		if (FlxG.keys.justReleased.ESCAPE && !inputText_hasFocus)
 			FlxG.switchState(() -> new MenuState());
 		#end
-		if (FlxG.keys.justReleased.SEVEN && !inputText_hasFocus)
+		if (FlxG.keys.justReleased.SEVEN && !inputText_hasFocus && verText.visible)
 		{
 			if (!PlaystateDebugSubState.inited)
 				PlaystateDebugSubState.init();
