@@ -1,6 +1,7 @@
 package;
 
 import flixel.addons.ui.FlxButtonPlus;
+import flixel.addons.ui.FlxUIDropDownMenu;
 import flixel.text.FlxText;
 
 class MenuState extends FlxState
@@ -33,14 +34,21 @@ class MenuState extends FlxState
 		playRegular.screenCenter();
 		playRegular.scale.set(2, 2);
 
-		var playBlank:FlxButtonPlus = new FlxButtonPlus(0, 0, () ->
+		var playPresents:FlxButtonPlus = new FlxButtonPlus(0, 0, () ->
 		{
 			FlxG.switchState(() -> new PlayState('assets/templates/$present'));
 		}, 'Play (World presents)', btnWidth);
-		add(playBlank);
-		playBlank.screenCenter();
-		playBlank.scale.set(2, 2);
-		playBlank.y = playRegular.y + playRegular.height + 32;
+		add(playPresents);
+		playPresents.screenCenter();
+		playPresents.scale.set(2, 2);
+		playPresents.y = playRegular.y + playRegular.height + 32;
+
+		var presentsDropDown:FlxUIDropDownMenu = new FlxUIDropDownMenu(playPresents.x + (playPresents.width + 32) * 1.5, playPresents.y,
+			FlxUIDropDownMenu.makeStrIdLabelArray(presents), function(present:String)
+		{
+			this.present = present;
+		});
+		add(presentsDropDown);
 
 		var Settings:FlxButtonPlus = new FlxButtonPlus(0, 0, () ->
 		{
@@ -49,6 +57,6 @@ class MenuState extends FlxState
 		add(Settings);
 		Settings.screenCenter();
 		Settings.scale.set(2, 2);
-		Settings.y = playBlank.y + playBlank.height + 32;
+		Settings.y = playPresents.y + playPresents.height + 32;
 	}
 }
