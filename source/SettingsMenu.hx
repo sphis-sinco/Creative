@@ -5,10 +5,12 @@ import flixel.addons.ui.FlxButtonPlus;
 class SettingsMenu extends FlxState
 {
         public static var Settings = {
-                auto_gen_block_list: true
+		auto_gen_block_list: true,
+		backup_files: true
         };
 
         var autoGenerateBlockList:FlxButtonPlus;
+	var backupFiles:FlxButtonPlus;
 
 	public static function loadSettings()
 	{
@@ -23,11 +25,18 @@ class SettingsMenu extends FlxState
                 autoGenerateBlockList = new FlxButtonPlus(80, 20, () ->
 		{
 			Settings.auto_gen_block_list = !Settings.auto_gen_block_list;
-			autoGenerateBlockList.text = 'Autogenerate-block list (${Settings.auto_gen_block_list})';
+			autoGenerateBlockList.text = 'Auto-generate block list (${Settings.auto_gen_block_list})';
 		}, 'Auto-generate block list (${Settings.auto_gen_block_list})',
 			MenuState.btnWidth);
 		add(autoGenerateBlockList);
                 autoGenerateBlockList.scale.set(2, 2);
+		backupFiles = new FlxButtonPlus(80, 20, () ->
+		{
+			Settings.backup_files = !Settings.backup_files;
+			backupFiles.text = 'Backup files (${Settings.backup_files})';
+		}, 'Backup files (${Settings.backup_files})', MenuState.btnWidth);
+		add(backupFiles);
+		backupFiles.scale.set(2, 2);
         }
 
         override function update(elapsed:Float) {

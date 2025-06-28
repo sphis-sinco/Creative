@@ -9,6 +9,8 @@ import flixel.util.FlxColor;
 
 class PlayState extends State
 {
+	static var backupLocation:String = '';
+
 	static var initedWorldBlocks = false;
 
 	public static var TYPING:Bool = false;
@@ -299,7 +301,7 @@ class PlayState extends State
 			required_packs: REQUIRED_PACKS
 		};
 
-		saveMsg.text = 'Saved world to  $file.json';
+		saveMsg.text = 'Saved world to $file.json';
 		FileManager.writeToPath('$file.json', Json.stringify(data));
 	}
 
@@ -453,6 +455,8 @@ class PlayState extends State
 			new_tag = blocks[new_tag_id];
 			CurrentBlock.changeBlock(new_tag);
 		}
+		backupLocation = 'backups/${saveFolder.text}/${saveName.text}';
+
 		#if sys
 		if (FlxG.keys.justReleased.ESCAPE && !inputText_hasFocus)
 		{
@@ -470,10 +474,16 @@ class PlayState extends State
 				loadWorld();
 		}
 		if (FlxG.keys.justReleased.A && !inputText_hasFocus)
+		{
+			saveWorld(backupLocation);
 			FlxG.switchState(() -> new MenuState());
+		}
 		#else
 		if (FlxG.keys.justReleased.ESCAPE && !inputText_hasFocus)
+		{
+			saveWorld(backupLocation);
 			FlxG.switchState(() -> new MenuState());
+		}
 		#end
 		if (FlxG.keys.justReleased.SEVEN && !inputText_hasFocus && verText.visible)
 		{

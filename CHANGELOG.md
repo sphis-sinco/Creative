@@ -1,5 +1,7 @@
 # 2025-06-28
 ## 0.4.0
+- Added "Backup files" setting
+- Changed "Autogenerate-block list" settings button when interacted with
 - Added Message below save inputs saying any message from loading or saving worlds
 - Added Pack checking for loading worlds
 - When saving worlds there is a new field: `required_packs`, it points out what resource packs you need
