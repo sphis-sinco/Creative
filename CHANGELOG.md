@@ -1,5 +1,6 @@
 # 2025-06-27
 ## 0.3.0
+- Added present list dropdown to the mainmenu to select other presents when they are added
 - Removed new_tag_id trace
 - Added Autogenerate block list option
 - Added SettingsMenu
