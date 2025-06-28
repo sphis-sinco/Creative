@@ -1,4 +1,7 @@
 # 2025-06-28
+## 0.4.0
+
+
 ## 0.3.4
 - Added keybind (ONE) to toggle the UI
 - New input field for save folder
