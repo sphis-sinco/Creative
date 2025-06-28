@@ -1,5 +1,6 @@
 package;
 
+import flixel.addons.ui.FlxUIInputText;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
 import flixel.math.FlxRandom;
@@ -220,8 +221,13 @@ class PlayState extends FlxState
 		CurrentBlockText = new FlxText(CurrentBlock.x + CurrentBlock.width + 10, CurrentBlock.y, 0, 'stone', 16);
 		add(CurrentBlockText);
 
+		commandInput = new FlxUIInputText(CurrentBlockText.x + CurrentBlockText.width + 10, CurrentBlockText.y, 300, 16);
+		add(commandInput);
+
 		add(MouseBlock);
 	}
+
+	var commandInput:FlxUIInputText;
 
 	#if sys
 	function saveWorld()
@@ -297,26 +303,27 @@ class PlayState extends FlxState
 	{
 		super.update(elapsed);
 		CurrentBlockText.text = CurrentBlock.block_tag;
+		commandInput.setPosition(CurrentBlockText.x + CurrentBlockText.width + 10, CurrentBlockText.y);
 
 		if (new_tag != CurrentBlock.block_tag)
 			new_tag = CurrentBlock.block_tag;
 
 		#if debug
-		if (FlxG.keys.justReleased.Q && zoom > 0.5)
+		if (FlxG.keys.justReleased.Q && zoom > 0.5 && !commandInput.hasFocus)
 			zoom -= 0.5;
-		else if (FlxG.keys.justReleased.E && zoom < 2)
+		else if (FlxG.keys.justReleased.E && zoom < 2 && !commandInput.hasFocus)
 			zoom += 0.5;
 
-		if (FlxG.keys.justReleased.Z && worldWidth > 1)
+		if (FlxG.keys.justReleased.Z && worldWidth > 1 && !commandInput.hasFocus)
 			worldWidth -= 1;
-		else if (FlxG.keys.justReleased.X && worldWidth < 50)
+		else if (FlxG.keys.justReleased.X && worldWidth < 50 && !commandInput.hasFocus)
 			worldWidth += 1;
 
-		if (FlxG.keys.anyJustReleased([Q, E, Z, X]))
+		if (FlxG.keys.anyJustReleased([Q, E, Z, X]) && !commandInput.hasFocus)
 			FlxG.resetState();
 		#end
 
-		if (FlxG.mouse.justReleasedRight)
+		if (FlxG.mouse.justReleasedRight && !commandInput.hasFocus)
 		{
 			for (block in worldBlocks)
 			{
@@ -328,12 +335,12 @@ class PlayState extends FlxState
 				}
 			}
 		}
-		else if (FlxG.mouse.justReleased)
+		else if (FlxG.mouse.justReleased && !commandInput.hasFocus)
 		{
 			placeBlock();
 		}
 
-		if (FlxG.keys.anyJustReleased([LEFT, RIGHT]))
+		if (FlxG.keys.anyJustReleased([LEFT, RIGHT]) && !commandInput.hasFocus)
 		{
 			var i:Int = 0;
 			for (block in blocks)
@@ -364,16 +371,20 @@ class PlayState extends FlxState
 			CurrentBlock.changeBlock(new_tag);
 		}
 		#if sys
-		if (FlxG.keys.justReleased.ESCAPE)
+		if (FlxG.keys.justReleased.ESCAPE && !commandInput.hasFocus)
 			saveWorld();
-		if (FlxG.keys.justReleased.ENTER)
+		if (FlxG.keys.justReleased.ENTER && !commandInput.hasFocus)
 			loadWorld();
-		if (FlxG.keys.justReleased.A)
+		if (FlxG.keys.justReleased.A && !commandInput.hasFocus)
 			FlxG.switchState(() -> new MenuState());
 		#else
-		if (FlxG.keys.justReleased.ESCAPE)
+		if (FlxG.keys.justReleased.ESCAPE && !commandInput.hasFocus)
 			FlxG.switchState(() -> new MenuState());
 		#end
+		if (FlxG.keys.justReleased.ENTER && commandInput.hasFocus)
+		{
+			commandInputed();
+		}
 	}
 
 	public function placeBlock()
@@ -424,4 +435,5 @@ class PlayState extends FlxState
 			worldBlocks.add(block);
 		}
 	}
+	public function commandInputed() {}
 }
