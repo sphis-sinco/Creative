@@ -35,6 +35,8 @@ class PlayState extends State
 		{
 			PlaystateDebugSubState.init();
 		}
+		blocks = [];
+
 	}
 
 	public static var blockScale:Int = 2;
@@ -195,8 +197,10 @@ class PlayState extends State
 		sky.scale.set(1280, 720);
 		add(sky);
 
-		blocks = blocks_og;
-
+		for (block in blocks_og)
+		{
+			blocks.push(block);
+		}
 		for (wool in wools)
 		{
 			blocks.push('${wool}_wool');
