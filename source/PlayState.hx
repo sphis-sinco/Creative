@@ -452,7 +452,7 @@ class PlayState extends FlxState
 			case 'setworld':
 				if (args[1] != null)
 				{
-					if (FileManager.exists(args[1]))
+					if (FileManager.exists(args[1]) || args[1] == 'inferno')
 					{
 						present = '';
 						if (args[1] == 'inferno')
