@@ -9,6 +9,8 @@ import flixel.util.FlxColor;
 
 class PlayState extends FlxState
 {
+	static var initedWorldBlocks = false;
+
 	public static var TYPING:Bool = false;
 
 	public static var present:String = '';
@@ -216,7 +218,10 @@ class PlayState extends FlxState
 		worldBlocks = new FlxTypedGroup<Block>();
 		add(worldBlocks);
 		if (randomWorld)
+		{
 			worldInit();
+			initedWorldBlocks = true;
+		}
 		CurrentBlock = new Block('stone', VersionText.x + VersionText.width + 10, 10);
 		CurrentBlock.scale.set(blockScale, blockScale);
 		add(CurrentBlock);
@@ -274,14 +279,10 @@ class PlayState extends FlxState
 		if (Json.stringify(data) == '' || data.world == null)
 			return;
 
-		if (worldBlocks != null && worldBlocks.length > 0)
-		{
+		if (!initedWorldBlocks)
 			for (block in worldBlocks)
-			{
 				block.destroy();
-				worldBlocks.remove(block);
-			}
-		}
+		worldBlocks.clear();
 
 		for (blockData in data.world)
 		{
@@ -466,10 +467,21 @@ class PlayState extends FlxState
 				FlxG.resetGame();
 			case 'setworld':
 				if (args[1] != null)
+				{
 					if (FileManager.exists(args[1]))
-						FlxG.switchState(() -> new PlayState(args[1]));
+					{
+						present = '';
+						if (args[1] == 'inferno')
+						{
+							present = args[1];
+							FlxG.switchState(() -> new PlayState());
+						}
+						else
+							FlxG.switchState(() -> new PlayState(args[1]));
+					}
 					else
 						commandOutput.text = 'Path doesn\'t exist';
+				}
 				else
 					commandOutput.text = 'Path required';
 			case 'clearworld':

@@ -1,6 +1,7 @@
 # 2025-06-27
 ## 0.3.2_01
-- Fixed crashes related to world presents
+- The `setworld` command can send you to inferno now
+- Fixed crash when opening a normal world and then opening a world with the "Blank" world present
 
 ## 0.3.2
 - Added command inputs
