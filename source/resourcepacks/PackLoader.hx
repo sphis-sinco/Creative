@@ -46,7 +46,7 @@ class PackLoader
 					if (pack.pack_format != PackClass.PACK_FORMAT)
 						trace('$folder has an outdated pack_format: ${pack.pack_format}');
 
-					if (!RESOURCE_PACK_LOCATIONS.contains('$RPF/$folder'))
+					if (!RESOURCE_PACK_LOCATIONS.contains('$RPF/$folder') && !RESOURCE_PACKS.contains(pack) && !packlist.contains(folder))
 					{
 						RESOURCE_PACKS.push(pack);
 						RESOURCE_PACK_LOCATIONS.push(location.replace('/$item', ''));
