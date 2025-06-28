@@ -452,6 +452,8 @@ class PlayState extends FlxState
 		commandInput.text = '';
 		commandInput.hasFocus = false;
 
+		commandOutput.text = '';
+
 		switch (args[0])
 		{
 			case 'resetstate':
